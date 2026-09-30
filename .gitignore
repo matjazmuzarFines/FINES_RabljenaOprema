@@ -1,0 +1,7 @@
+# Izvorni poslovni podatki in izvoz Power Apps – ne sodijo v repozitorij
+*.xlsx
+*.msapp
+
+# Lokalne nastavitve in ključi
+.env*
+!.env.example
