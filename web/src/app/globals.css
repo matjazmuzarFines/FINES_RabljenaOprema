@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/*
+ * Barve FINES d.o.o. (glej rbo_instructions.md)
+ * Primary: temno oranžna, Secondary: sive, bela, črna.
+ * Funkcijske: zelena = dodaj/potrdi/shrani, rdeča = izbriši, rumena = opozorila, modra = zunanje funkcije/sync.
+ */
+@theme {
+  --color-brand: #e8590c;
+  --color-brand-hover: #d24600;
+  --color-brand-pressed: #be3700;
+  --color-brand-soft: #fdf0e8;
+
+  --color-ink: #1a1a1a;
+  --color-ink-muted: #6b6b6b;
+  --color-ink-faint: #888888;
+  --color-line: #e2e0dc;
+  --color-surface: #ffffff;
+  --color-canvas: #fbfaf8;
+  --color-dark: #2b2b2b;
+
+  --color-ok: #22b14c;
+  --color-ok-hover: #1c9a41;
+  --color-danger: #dc2626;
+  --color-danger-hover: #b91c1c;
+  --color-warn: #facc15;
+  --color-warn-soft: #fef9c3;
+  --color-info: #0284c7;
+  --color-info-hover: #0369a1;
+
+  --font-sans: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}

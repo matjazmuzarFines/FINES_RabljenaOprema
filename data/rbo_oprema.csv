@@ -1,0 +1,148 @@
+id,datum_prejema,kolicina,em,koda,serijska_stevilka,leto_proizvodnje,skupina_opreme,oprema_naziv,lastnistvo,skladisce,komentar,ocena
+"1","2024-09-20","1","kos",,"F001410133","2010","Peč konvekcijska","CO3-40 comp",,,"Peč urejena za prodajo; Trenutno posojena v Romeo plus",
+"2","2024-09-20","1","kos",,"F005210100","2010","Peč konvekcijska","COM-BO CO5-CS",,,"Potrebno urediti za prodajo",
+"3","2024-09-20","1","kos",,"F00080660","2006","Peč konvekcijska","COM-BO CO8",,,"Ne delujoča; poterbno popisati stroške popravila; Pripeljano iz Jezerška",
+"4","2024-09-20","1","kos",,"F01200582",,"Vzhajalnik / Nevtralna oprema","COM-BO CP10-S",,,"Potebno urediti za prodajo",
+"5","2024-09-20","1","kos","100-123","F000608123","2008","Peč pica","ES660-3 Digital",,,"Potrebno urediti za prodajo; Namenjena za posojo",
+"6","2020-05-14","1","kpl",,"F00915267","2015","Peč etažna","Etažna peč na podstavku FD68/2-D + nakladalni aparat","TUJE - Koren",,"ODPRODAJA; RABLJENO;",
+"7",,"1","kos","100-601","21.0654.002","2021","Peč konvekcijska","FB5-S","FINES",,"Pregledana iz strani FIAN",
+"8","2024-09-20","1","kos","100-201","F022714201","2014","Peč konvekcijska","FBM 60D","FINES",,"Urejena za prodajo; Posojena v kazo(štrudl fest)",
+"9","2022-03-30","1","kos","100-170","18.0346.001.1.170","2018","Vzhajalnik / Nevtralna oprema","FBPM-60M","FINES","ERP; 15; RABLJENO","Rabljen prototipni vzhajalnik; Vidne sledi uporabe zaradi testiranja; rahla poškodba na lovilcu kondenza","4"
+"10","2022-11-23","1","kos","100-562.0010003","22.0544.001","2022","Peč etažna","FD 64 H2/-D2","FINES","ERP; 15; RABLJENO","Rabljeno; uporabljen za testiranje lučk",
+"11","2022-03-30","1","kos","100-275","/",,"Peč etažna","FD64",,,"Potrebn pregledati in stestirati",
+"12","2024-09-20","1","kos",,"Brez serijske",,"Peč etažna","FD64/1M",,,"Vrnjena iz Jasmin Huseinović sp; urejena za prodajo",
+"13","2022-06-01","1","kos","100-355","19.0158.002","2019","Peč etažna","FD64/1S smart","FINES",,"Vrnjena iz Artosa;potrebna pregleda in čiščenja",
+"14","2020-05-14","1","kpl","601-10007",,,"Peč etažna","FD64/2D+HTBD-10+napa VSE UP","FINES","ERP; 13; TRGOVSKO","Trgovsko blago; RABLJENO; Vrnjena Dulcis UP-posojena Jager/PRODANA B&B",
+"15","2021-06-16","1","kos","100-285","Ni razvidna",,"Peč etažna","FD68/1 manual","TUJE - Lena d.o.o.",,"Rabljeno; priklopljena podana ocena stroškov; Urejena za prodajo",
+"16","2021-08-18","1","kos","100-563.0000000","21.0135.001","2021","Peč etažna","FD68H1/1s","FINES",,"Potrebn pregledati in stestirati",
+"17","2022-06-01","1","kos","100-563.0020000","22.0410.001","2022","Peč etažna","FD68H1/2S","FINES","ERP; 15; RABLJENO","Potrebna pregleda",
+"18","2024-09-20","1","kos","100-564.0020003","23.0371.001","2023","Peč etažna","FD68H2/2-D2","FINES","ERP; 15; RABLJENO","Potrebno urediti za prodajo;minimalno rabljena;Vrnjena iz sejma TIM ZIP","4"
+"19","2024-09-20","1","kos","100-566.0000000","23.0714.001","2023","Peč etažna","FD86H2/1S","FINES","ERP; 15; RABLJENO","Urejena za prodajo;","6"
+"20","2021-03-30","1","kos","100-313","18.0036.021.001313","2018","Peč konvekcijska","HTB 5 Simple","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO; Filco, Vrnjena Tim Zip, Nadomestna peč, posojena ŽITO MB",
+"21","2024-09-20","1","kos","110-10151","23.0525.001","2023","Peč konvekcijska","HTB 8","FINES","ERP; 15; RABLJENO","Urejena za prodajo; Brez agregata in pranja",
+"22","2022-02-02","1","kos","100-301","19.0008.013","2019","Peč konvekcijska","HTB-5","FINES","ERP; 15; RABLJENO","Vrnjeno POLMARKUS; V salonu Romika Domžale",
+"23","2024-09-20","1","kos","110-10150","23.0524.001","2023","Peč konvekcijska","HTB-5","FINES","ERP; 15; RABLJENO","Peč brez agregata in pranja; urejena za prodajo; Posojen v slaščičarno ROYAL Grosuplje",
+"24","2024-09-20","1","kos","110-10065","23.1030.001","2023","Peč konvekcijska","HTBM 60","FINES","ERP; 15; RABLJENO","vrnjena iz razvoja uporabljena za testiranje; urejena za prodajo",
+"25","2024-09-20","1","kos",,"22.0870.003","2022","Peč konvekcijska","HTBM-40","FINES","ERP; 15; RABLJENO","Uporabljena za primerjavo peke z UNOX pečjo; Urejena za prodajo",
+"26","2020-05-14","1","kos",,,,"Peč gastro-konvektomat","Konvektomat Bonnet","FINES","SELA","NEURADNO; RABLJENO; Emil Kuit - NI ZA PRODAJO; Razvoj pregleda",
+"27","2020-05-14","2","kos","100-162",,,"Ostalo","Kruh rola","FINES","SELA","Novo; NOVO; Skladišče SELA",
+"28","2024-09-20","1","kos",,,,"Ostalo","Kuhalna plošča","FINES","VIR",,
+"29","2020-05-14","1","kos",,"150538","2015","Ostalo","Mac pan oblikovalec za zavijanje","FINES","ERP; 13; TRGOVSKO","; NOVO; 2109140950FIKA: ""Last Branko Koren Pekarna Tacen, nato je bilo poslano in vrnjeno Danimex (13.5.2020).""",
+"30","2021-07-08","1","kos","645-02",,,"Ostalo","MAC-PAN - Stroj za oblikovanje, zavijanje FR2C60","FINES","ERP; 13; TRGOVSKO","Trgovsko blago; Urediti za prodajo",
+"31","2020-05-14","2","kos",,,,"Ostalo","Mecnosud DL40 namizni sheeter (valjar za pice)","FINES","ERP; 13; TRGOVSKO","; NOVO; Urejeno za prodajo",
+"32",,"1","kos",,"IM18AD-0673","2016","Ostalo","Mecnosud mikser IM 18AD","FINES",,"PRODANO; NOVO; PRODANO LIAS",
+"33",,"1","kos",,,,"Peč konvekcijska","MINI 60 (vrnjena Zendeli)","FINES",,"PRODANO; RABLJENO; PRODANO LIAS",
+"34",,"1","kpl",,,,"Peč konvekcijska","Mini napa, FBM 60, podstavek","FINES",,"PRODANO; MALO RABLJENO; Filco BTC, Prodano Hrvaška",
+"35","2020-05-14","1","kos","100-330","F008715330","2015","Napa","Napa HTB HK","NEURADNO","NEURADNO","NEURADNO; RABLJENO;",
+"36","2020-05-14","1","kos","601-10004",,,"Napa","Napa kondenzacijska FBM-K60","FINES","ERP; 13; TRGOVSKO","Trgovsko blago; KOT NOVO; Vrnjeno Dubaj",
+"37","2020-05-14","1","kos","100-330",,,"Napa","Napa kondenzacijska HTB-HK","FINES",,"PRODANO; NOVO; Vrnjena TIM-ZIP - potreben samo pregled",
+"38",,"1","kos","100-330","17.0117.006.1.330",,"Ostalo","Napa kondenzacijska HTB-HK","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO; Bila v Filcotu/ brez kondenzatorja, Servis",
+"39","2020-05-14","1","kos",,,,"Napa","Napa UP","FINES","ERP; 14; RAZVOJ","RAZVOJ; NOVO; Prototip z LED lučmi, Salon",
+"40","2021-03-31","1","kos","100-331","17.0104.039.1.331","2017","Napa","Napa ventilacijska HTB-HV","FINES","NEURADNO","NEURADNO; RABLJENO ; Kalinškova peč",
+"41","2024-09-20","1","kos",,,,"Ostalo","OP611/1011 h=90","NEURADNO","FINES","Pripeljano iz Tuš Domžale; Unikaten podstavek višine 90;","4"
+"42",,"1","kos",,"18.0095.001.4.558","2018","Peč etažna","Peč etažna 86/1 S smart","FINES",,"PRODANO; MALO RABLJENO; Vrnjena Hert, Prodano Lias",
+"43","2021-03-30","1","kos","100-563.0010003","21.0137.001","2021","Peč etažna","Peč etažna FD  64H2/1 D2 DIGITAL","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO - KOT NOVO; Razvojna; Pripravljeno za prodajo",
+"44","2020-05-14","1","kos","100-380",,,"Peč etažna","Peč etažna FD 64/1-M","FINES",,"PRODANO; RABLJENO; Vrnjena Danimex",
+"45","2020-05-14","1","kos","100-380",,,"Peč etažna","Peč etažna FD 64/1-M","FINES",,"PRODANO; ; Vrnjeno Danimex 13.5.2020 - NOVA PEČ",
+"46","2020-05-14","1","kos","100-380",,,"Peč etažna","Peč etažna FD 64/1-S","FINES","ERP; 14; RAZVOJ","RAZVOJ; RAZVOJNA; Znižana etaža - NI ZA PRODAJO/ predelana in prodana",
+"47","2020-05-14","1","kos","100-381","F00615351","2015","Peč etažna","Peč etažna FD 64/2-M II","FINES",,"PRODANO; RABLJENO; Bivša Đemo peč, predelana za Nobel (poličke), močnejši grelci, termostat 400C.",
+"48","2020-05-14","1","kos",,"F00215351","2015","Peč etažna","Peč etažna FD 64/2-M II","NEURADNO",,"ODPRODAJA; RABLJENO; Bivša Đemo peč, nova-črna fronta, uporablja PUC za pice",
+"49","2020-05-14","1","kos","100-382","F001815361","2015","Peč etažna","Peč etažna FD 68/3-M II","FINES",,"PRODANO; RABLJENO; Rumeni design NOVA ŠIRINA - 98cm, Bivša Đemo peč",
+"50","2020-05-14","1","kos",,"18.0046.013.1.366","2018","Peč etažna","Peč etažna FD68/2 S","TUJE - Romeo Plus",,"ODPRODAJA; RABLJENO;",
+"51","2021-03-30","1","kos","100-563.0010003","21.0138.001","2021","Peč etažna","Peč etažna FD68H1/1-D2 DIGITAL","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO - KOT NOVO; PRODANO TIM ZIP",
+"52","2021-03-30","1","kos","100-564.0000000","21.0449.001","2021","Peč etažna","Peč etažna FD68H2/1-S smart","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO - KOT NOVO; Razvojna, Salon; Pripravljeno za prodajo;v skladišču; predelava v manual za Tim zip",
+"53","2021-03-30","1","kos","100-565.0000000","21.0136.001","2021","Peč etažna","Peč etažna FD86/1 S Smart","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO - KOT NOVO; Razvojna; Pripravljeno za prodajo;Posojena Dejan Turk s.p.",
+"54","2021-03-30","1","kos","100-565.0000000",,,"Peč etažna","Peč etažna FD86/1-S Smart","FINES","NEURADNO","NEURADNO; RABLJENO - KOT NOVO; Vrnjena Polmarkus",
+"55","2020-05-14","1","kos",,,,"Peč konvekcijska","Peč konvekcijska COM-BO 5 Manual","NEURADNO",,"ODPRODAJA; RABLJENO, STARO; Moj mesar Jože",
+"56","2020-05-14","1","kos","100-135",,,"Peč konvekcijska","Peč konvekcijska COM-BO CO3 60 manual","NEURADNO",,"ODPRODAJA; RABLJENO, STARO; Rdeča vrata Čož-Elektronika ne deluje. Peč se ne zažene.",
+"57","2020-05-14","1","kos","100-310",,,"Peč konvekcijska","Peč konvekcijska FB5-D II L","FINES",,"PRODANO; NOVO; Vrnjena TIM-ZIP - potreben samo pregled",
+"58","2020-05-14","1","kos","100-161","F001410133","2010","Peč konvekcijska","Peč konvekcijska FBM 40 D","FINES","ERP; 14; RAZVOJ","RAZVOJ; RAZVOJNA; predelana iz stare FBM - manjka elektro in stikalna plošča, elektro plata na izvlek.; Razvoj pregleda",
+"59","2020-05-14","1","kos","100-302.000100","17.0108.023.1.302",,"Peč konvekcijska","Peč konvekcijska HTB 8 AVTOMATSKA VRATA UP","FINES","ERP; 14; RAZVOJ","RAZVOJ; KOT NOVO; Prototip, Salon",
+"60","2020-05-14","1","kos","100-301",,,"Peč konvekcijska","Peč konvekcijska HTB-5","FINES","ERP; 14; RAZVOJ","RAZVOJ; TESTNA; Industijska / razvojna delavnica",
+"61","2020-05-14","1","kos","100-302",,,"Peč konvekcijska","Peč konvekcijska HTB-8","FINES","ERP; 14; RAZVOJ","RAZVOJ; TESTNA; Pri Kaduncu, razvoj nape. Vrnjana od Kadunca in se montira pri Urošu za potrebe testiranja; Vrnjena v fines","1"
+"62",,"1","kos",,,,"Peč konvekcijska","Peč konvekcijska HTB-8","FINES",,"PRODANO; MALO RABLJENO; Salon HC vrnjena, prodano Kaza",
+"63","2020-05-14","1","kos","100-302","17.0148.029.1.302","2017","Peč konvekcijska","Peč konvekcijska HTB-8","NEURADNO","NEURADNO","NEURADNO; RABLJENA; Vrnjena iz Tuzle-počena komora, Posojen MC, Nadomestna peč",
+"64","2020-05-14","1","kos","100-160",,,"Peč konvekcijska","Peč konvekcijska HTBM-60","FINES","ERP; 15; RABLJENO","Rabljeno; RABLJENO; Vrnjena Nobel burek",
+"65","2020-05-14","1","kos","601-10005",,,"Peč konvekcijska","Peč konvekcijska HTBM-60","FINES",,"ODPRODAJA; KOT NOVO; Vrnjeno iz Dubaja-3x rabljeno",
+"66","2024-09-20","1","kos","110-10145","23.0342.001","2023","Peč konvekcijska","Peč konvekcijska THERMICO 5 USA basic","FINES","NEURADNO","NEURADNo;  prva varijanta globoka,",
+"67","2020-05-14","1","kos","100-414","18.0215.003.4.414","2018","Peč konvekcijska","Peč konvekcijska THERMICO 5 USA basic","FINES","NEURADNO","NEURADNO; TESTNA; druga varijanta, brez vrat; Urediti za prodajo",
+"68","2020-05-14","1","kos","100-414","19.0169.001","2019","Peč konvekcijska","Peč konvekcijska THERMICO US 5","TUJE - Wachtel","ERP; 14; RAZVOJ","RAZVOJ; TESTNA; Urediti za prodajo",
+"69","2021-07-08","1","kos","100-414","19.0170.001","2019","Ostalo","Peč konvekcijska THERMICO US 5",,"NEURADNO","NEURADNO; RABLJENO; Urediti za prodajo",
+"70","2020-05-14","1","kos","100-303",,"2017","Peč konvekcijska","Peč konvekcijskaHTB 10","FINES","ERP; 14; RAZVOJ","RAZVOJ; KOT NOVO; vrnjena LGB, Razvoj, manjka motor; Razvoj pregleda",
+"71","2021-03-31","1","kos","100-122",,,"Peč pica","Peč za pice ES 660-2 DIGITAL","FINES",,"ODPRODAJA; RABLJENA - SPAR VIČ; ČRNA - SE LUŠČI - NI ZA PRODAJO",
+"72","2024-09-20","1","kos",,,,"Ostalo","Pladenj 60x40x3 Zaprt perforiran","FINES","FINES",,
+"73","2024-09-20","4","kos",,,,"Ostalo","Pladenj Alu 60x40 4x valovit perforiran","FINES","FINES",,
+"74","2024-09-20","2","kos",,,,"Ostalo","Pladenj ALU 60x40x1 zelen teflon","FINES","FINES",,
+"75","2024-09-20","2","kos",,,,"Ostalo","Pladenj ALU 60x40x2 perforiran","FINES","FINES",,
+"76","2024-09-20","28","kos",,,,"Ostalo","Pladenj ALU 60x40x2 Zaprt",,,"Uničen rob, kjer je pladenj stisnjen na vrhu",
+"77","2024-09-20","2","kos",,,,"Ostalo","Pladenj ALU 80x53x3 14 posodic zelen teflon","FINES","FINES",,
+"78","2024-09-20","3","kos",,,,"Ostalo","Pladenj GN 71x53x3","FINES","FINES","Potrebno očistiti",
+"79",,"1","kos","100-341",,,"Ostalo","Podstavek HTB 10/90","FINES",,"Rabbljeno",
+"80","2020-05-14","1","kos","601-10006",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FBM-605/90 WT","FINES","ERP; 13; TRGOVSKO","Trgovsko blago; KOT NOVO; Vrnjeno iz Dubaja",
+"81","2020-05-14","1","kos","601-10012",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FBM-606/90",,,"; NEPREGLEDANO; Vrnjeno Danimex 13.5.2020",
+"82","2020-05-14","1","kos","100-371",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FD-68/75 II","FINES","NEURADNO","NEURADNO; RABLJENO; Vrnjen Možina - primeren za barvanje",
+"83","2020-05-14","1","kos","100-371.000100",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FD-68/75 II UP","FINES",,"PRODANO; RAZSTAVNI EKSPONAT; Vrnjeno iz Dubaja",
+"84","2020-05-14","1","kos","100-370",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FD-68/90    H=90cm","TUJE - Romeo Plus",,"ODPRODAJA; RABLJENO;",
+"85","2020-05-14","1","kos","100-371","/",,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FD-68/90 II","NEURADNO","NEURADNO","NEURADNO; RABLJENO; Urediti za prodajo - samo končna priprava (čiščenje)",
+"86","2021-03-31","1","kos","100-572",,,"Vzhajalnik / Nevtralna oprema","Podstavek nevtralni FD-86/90 H=90cm","FINES","ERP; 15; RABLJENO","Rabljeno; KOT NOVO; Vrnjen Polmarkus; Urediti za prodajo - samo končna priprava (čiščenje)",
+"87","2020-05-14","1","kos","638-101",,"2019","Peč gastro-konvektomat","Pro cook F1 623i","FINES",,"ODPRODAJA; KOT NOVO; Gast Lj, Split",
+"88",,"1","kos",,,,"Peč gastro-konvektomat","Pro Cook F2 1011b + podstavek","FINES",,"PRODANO; ; Vrnjeno Horeca, posojeno KAZI, prodano steklarna Hrastnik",
+"89",,"1","kos",,,,"Peč gastro-konvektomat","Pro Cook F2 1011b + podstavek,","FINES",,"PRODANO; ; Vrnjeno MC Mengeš, OB INVENTURI UGOTOVLJENO NAPAČNO SKLADIŠČE",
+"90",,"1","kos","638-101",,,"Peč gastro-konvektomat","PRO-COOK II Konvektomat F1-623 i","TUJE - Mercedes bar","ERP; 15; RABLJENO","2109101200FIZL: ""Andrej prodal Mercedes baru, tuja last, fizično je še v Finesu. Nato so se odločili, da ne bodo vzeli.""",
+"91","2020-05-14","1","kos","638-02003",,,"Ostalo","PRO-COOK oprema - Voziček za pladnje / 2011","FINES","NEURADNO","NEURADNO; RABLJENO;",
+"92","2020-05-14","1","kos","654-10001",,"2019","Peč hitra","PRO-SONIC-X1","FINES",,"PRODANO; KOT NOVO; Gast, Polmarkus",
+"93","2020-05-14","1","kos","654-10002",,"2019","Peč hitra","PRO-SONIC-X2","FINES","ERP; 15; RABLJENO","Rabljeno; KOT NOVO; Split / posojena Hert;Vrnjena v skladišče; posojena v",
+"94",,"1","kos",,,,"Ostalo","Rezalnik kruha DURO 450/16","FINES",,"PRODANO; NOVO; PRODANO MERIDIAN",
+"95","2020-05-14","1","kos","110-185",,,"Napa","UNIKAT - Napa kondenzacijska FBM-K60.0980.FD64/2","FINES",,"PRODANO; RABLJENO; Vrnjeno Nobel Burek",
+"96","2020-05-14","1","kos","110-173",,,"Vzhajalnik / Nevtralna oprema","UNIKAT - Podstavek nevtralni ES-OP/60 desno zaprt","TUJE - Zendelli","NEURADNO","NEURADNO; NOVO ; Zendeli",
+"97","2020-05-14","1","kos","110-187",,,"Vzhajalnik / Nevtralna oprema","UNIKAT - Podstavek zaprt HTBP20/95","FINES",,"PRODANO; NOVO ; Izdelano za Maxi imitacija vzhajalnika",
+"98","2020-05-14","1","kos",,,,"Ostalo","Vitella delilno okroglilni stroj","FINES",,"PRODANO; RABLJENO; Vrnjeno Danimex 13.5.2020 - Prodano NOBEL",
+"99","2021-07-08","1","kos",,,,"Ostalo","Voziček nakladalni OC-B-05+08","FINES","NEURADNO","; NOVO; Urediti za prodajo",
+"100","2020-05-14","1","kos","100-171",,"2018","Vzhajalnik / Nevtralna oprema","Vzhajalnik FBPM-40 M","FINES","ERP; 20; PROIZVOD","Novo; RAZSTAVNI EKSPONAT; prototip; Urediti za prodajo",
+"101","2020-05-14","1","kos","100-321",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP 16D","FINES","ERP; 14; RAZVOJ","RAZVOJ; TESTNA; Odpis",
+"102","2020-05-14","1","kos","100-321",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP 16D","FINES",,"RAZVOJ; RABLJENO; ostalo samo še ohišje - ODPAD!",
+"103","2020-05-14","1","kos","100-321",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP 16D","FINES",,"ODPRODAJA; RABLJENO; Vrnjeno Nobel Burek",
+"104","2020-05-14","1","kos","100-324","18.0097.001.4.324","2018","Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP 16S UP","FINES","ERP; 14; RAZVOJ","RAZVOJ; KOT NOVO; Prototip, Salon; Urediti za prodajo",
+"105","2020-05-14","1","kos","100-323",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP10-D","FINES",,"ODPRODAJA; RABLJENO; Vrnjeno Tim Zip, Brez sonde",
+"106","2020-05-14","1","kos","100-323",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP10-D","FINES",,"ODPRODAJA; RABLJENO; Vrnjeno Tim Zip, Brez sonde",
+"107","2020-05-14","1","kos","601-10010",,,"Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP10-M","FINES",,"; NEPREGLEDANO; Vrnjeno Danimex 13.5.2020",
+"108","2021-10-19","1","kos","100-324.0000003","21.0309.004","2021","Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP16/80-D2","FINES","ERP; 15; RABLJENO","Vrnjeno TIM ZIP - SALAŠI. Potreben pregled opreme",
+"109","2021-10-19","1","kos","100-324.00000003","21.0309.002","2021","Vzhajalnik / Nevtralna oprema","Vzhajalnik HTBP16/80-D2",,"ERP; 15; RABLJENO","Vrnjeno TIM ZIP - SALAŠI. Potreben pregled opreme",
+"110","2020-05-14","1","kos","100-421","nima tov.nalepke",,"Vzhajalnik / Nevtralna oprema","Vzhajalnik PV-B16SW","FINES","ERP; 14; RAZVOJ","RAZVOJ; TESTNA; Wachtel; Urediti za prodajo",
+"111","2026-03-25","1","kos","100-603.1001","26.0131.001","2026","Peč konvekcijska","FB10-S CL E","FINES","ERP; 15; RABLJENO","Notranjsot rahlo obdrsana zaradi testiranja nakladalnega vozička.","5"
+"112","2026-03-25","1","kos","100-601.3007","24.1113.024","2026","Peč konvekcijska","FB5-S CL E 9,55kW","FINES","ERP; 15; RABLJENO","kot nova; Posojena MC BREŽICE; Predelana v FB611-S Snack 26.0745.001","5"
+"113","2026-03-25","1","kos","100-562-0000000","22.0256.002","2022","Peč etažna","FD64H2/1-S","FINES","ERP; 15; RABLJENO","Rabljena peč vrnjena  iz turčije; Zunanjost umazana in se ne da očistiti",
+"114","2026-03-25","1","kos","100-325.0000003","22.0273.001","2022","Vzhajalnik / Nevtralna oprema","HTBP10/60-D2","FINES","ERP; 15; RABLJENO","Rabljen vzhajalnik vrnjen iz Turčije; zunanjost umazana in se ne da očistiti",
+"115","2026-03-25","1","kos","100-563.003000","26.0000.001","2026","Peč etažna","FD68H1/3-S","FINES","ERP; 15; RABLJENO","Peč vrnjena iz SIQ; urejena za prodajo; peč kot nova;","6"
+"116","2026-03-25","1","kos","100-601.3007","24.1113.016","2024","Peč konvekcijska","FB5-S CL 9,5kW","FINES","ERP; 15; RABLJENO","Peč iz razvoja; urejena za prodajo; kot nova","5"
+"117","2026-03-25","1","kos","100-566.0000003","26.0002.001","2026","Peč etažna","FD86H2/1-D2","FINES","ERP; 15; RABLJENO","Peč vrnjena iz SIQ; urejena za prodajo; peč kot nova; Zadnja notranja stranica rumena od kurjenja","5"
+"118","2026-03-25","1","kos","100-562.0010003","26.0001.001","2026","Peč etažna","FD64H2/1-D2","FINES","ERP; 15; RABLJENO","Peč vrnjena iz SIQ; urejena za prodajo; peč kot nova; Zadnja notranja stranica rumena od kurjenja","5"
+"119",,"1","kos","657-10001",,,"Peč hitra","PRO-SONIC X01B Sofraca","FINES","ERP; 15; RABLJENO","Peč posojena Jezeršek d.o.o",
+"120",,"1","kos","657-10001",,,"Peč hitra","PRO-SONIC X01R Sofraca","FINES","ERP; 15; RABLJENO","Peč je nova;Na bočni stranici ima vidno prasko",
+"121",,"1","kos","600-10092",,,"Peč hitra","PRO-SONIC ST 230V","FINES","ERP; 15; RABLJENO","Rabljen zaradi testiranja v FINESu",
+"122",,"1","kos","600-10091","1181965","2025","Peč hitra","PRO-SONIC X1 Double mag","FINES","ERP; 15; RABLJENO","Rabljen zaradi testiranja v FINESu. Zunanjost v dobrem stanju. Notranjost umazana zaradi uporabe  Posojen v Kazo.","3"
+"123","2026-04-03","1","kos","100-370",,,"Vzhajalnik / Nevtralna oprema","Podstavek FD68/90","FINES","FINES","Rahljo rabljen, minimalno poškodovan na sprednj strani (udrtina)","4"
+"124","2026-04-03","1","kos","100-370","18.0391.005.1.370","2018","Vzhajalnik / Nevtralna oprema","Podstavek FD68/90","FINES","FINES","Rahljo rabljen, minimalno poškodovan na sprednj strani (udrtina)","4"
+"125","2026-04-03","1","kos",,,,"Napa","Napa FD86 UP","FINES","FINES","Napa narejena za sejem. Sprednja stranica rahlo popraskana. Brez sestava kondenzatorja.","4"
+"126","2026-04-03","1","kos","100-324-0000003","26.0794.001","2026","Vzhajalnik / Nevtralna oprema","HTBP16/80-D2","FINES","FINES","Prototipni vzhajalnik D2. Potrebno pregledati. Manjka prekriv elektroplošče, prekriv grelca, potrebno zamenjati stikalno ploščo.  Vzhajalnik je stestiran dne 15.07.2026 . Nova stikalna plošča dodana, nova vodila, novi srednji prekriv za grelce, novi prekriv elektro plošče","1"
+"127","2026-04-03","1","kos","100-302","F003915302","2015","Peč konvekcijska","HTB8","FINES","ERP; 15; RABLJENO","Rabljena peč. Vrnjena iz REPRO - švedska. Brez vodil. Potrebno pregledati delovanje peči.","4"
+"128","2026-04-03","1","kos","100-602.000010","24.1134.009","2024","Peč konvekcijska","FB8-S CL","FINES","ERP; 15; RABLJENO","Peč pripeljana iz trgovine Jager. Rahle sledi uporabe.","6"
+"129","2026-04-03","1",,,"2095346","2020",,"Stiskalnica za pice - SPZ40","FINES",,,
+"130","2026-05-12","1","kos",,,"2025","Ostalo","Brita C1100 iQ Quell ST","FINES","ERP; 14; RAZVOJ","Rabljena mehčalna naprava;Bila uporabljena za namen razvoja","5"
+"131","2026-06-09","1","kos","100-342","26.0129.003","2026","Ostalo","HTB-CU6/50","FINES","ERP; 15; RABLJENO","Malo rabljena. Vidna rja na kolesih. Minimalne praske","4"
+"132",,"1","kos","657-10001",,,,"PRO-SONIC X01B Sofraca","FINES","ERP; 15; RABLJENO","Posojena v JEZERŠEK d.o.o","5"
+"133","2026-06-24","1","kos",,"681652512","2025","Peč gastro-konvektomat","Pro cook F3 611 IG","FINES","ERP; 15; RABLJENO","Rabljen PRO-COOK Vrnjen iz Mercator centra Murgle 14 ur delovanja Nazaj v skladišče","5"
+"134","2016-06-23","1","kos","100-330","22.0087.004","2022","Napa","Napa kondenzacijska HTB-HK","FINES","ERP; 15; RABLJENO","Napa malo rabljena, vidne sledi uporabe, sprednja maska rahlo spraskana, kondenzator zamenjan za novega","5"
+"135","2026-06-26","1","kos",,,"2015","Peč konvekcijska","Komplet HTB (podstavek, peč, napa)","FINES","ERP; 15; RABLJENO","Komplet HTB - podstavek, peč, napa. Zelo rabljen, neočiščen.","2"
+"136","2026-06-26","1","kos","100-563.0030000","22.0211.001","2022","Peč etažna","FD68H1/3-S","FINES","ERP; 15; RABLJENO",,"4"
+"137","2026-06-26","1","kos","100-371","21.0406.002","2021","Ostalo","Podstavek FD-68/75 II","FINES","ERP; 15; RABLJENO",,"4"
+"138","2026-07-15","1","kos","100-602.000010","26.0696.001","2026","Peč konvekcijska","FB8-S CL","FINES","ERP; 15; RABLJENO","Predelava iz HTB-8 na FB8-S CL. Peč je stestirana, notranje steklo je malo opraskano, ponekod so vidni madeži na zunanjosti in notranjosti. Ima HTB prekriv ventilatorja, nima ethernet priklopa","4"
+"139",,"1","kos","657-10001",,,"Peč hitra","PRO-SONIC X01B Sofraca","FINES","ERP; 15; RABLJENO","Zunanjost peči nova, notranjost ima sledi uporabe zaradi peke na sejmih in testiranjih","5"
+"140","2026-07-27","1","kos","100-166.1007","26.0738.001","2026","Peč konvekcijska","Fbm-40S CL BM","FINES","ERP; 15; RABLJENO","Rabljena pec vidna kaksna praska v komori peci.","4"
+"141","2026-08-14","1","kos","100-165.1006","25.0875.001","2025","Peč konvekcijska","FBM-60S CL","FINES","ERP; 15; RABLJENO","Razvojna peč Peč se je uporabljala v razvoju za namen testiranja. Komora zelo malo spraskana Nazaj v skladišče","4"
+"142","2026-08-18","1","kos","100-304","17.0148.022.1.304","2017","Peč konvekcijska","HTB-5 L","TUJE","FINES","HTB peč za izposojo. Potrebna popravila in ponovna montaža. Oprati, posodobiti sistem pranja, desni nosilec pladnjev, vsestranski pregled in preizkus.","2"
+"143","2026-09-22","1","kos","100-324.0000003","26.0255.001","2026","Vzhajalnik / Nevtralna oprema","HTBP16/80-D2","FINES","ERP; 15; RABLJENO","Rabljeni vzhajalnik, proizveden 04/2026 in dan v izposojo. Minimalno obrabljen vendar vidne sledi obrabe. Na zunanjih stranicah vidni mali madeži (neodstranljivi). Vodila imajo sledi drsenja. Zgornja površina ima sledi drsenja. Notranjost brez poškodb. Ni večjih nepravilnosti/poškodb.","4"
+"144","2026-09-18","1","kos","100-602.000010","26.0208.002","2026","Peč konvekcijska","FB8-S CL","FINES","ERP; 15; RABLJENO","FB8 S CL - Brez poškodb. Preč vizuelno umazana/flekasta. Čiščenje ni pomagalo. Razen vizualnih nepravilnosti, brez napak.","4"
+"145","2026-09-18","1","kos","100-330.1000","25.0669.007","2026","Napa","HTB-HK LED","FINES","ERP; 15; RABLJENO","Odlično ohranjena rabljena napa","5"
+"146","2026-09-22","1","kos","100-601.1014","26.0745.001","2026","Peč gastro-konvektomat","FB611-S Snack","FINES","ERP; 15; RABLJENO","Rabljena peč. Minimalno obrabljena vodila. Vizuelno brez poškodb. Malce flekaste površine. Peč od MC Brežice","4"
+"147","2026-09-22","1","kos","100-343","22.1008.003","2022","Ostalo","HTB-CU8/75","FINES","ERP; 15; RABLJENO","Malo rabljena vodila. Flekaste površine","4"
