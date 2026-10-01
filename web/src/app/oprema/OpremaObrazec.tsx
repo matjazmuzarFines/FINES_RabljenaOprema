@@ -5,17 +5,26 @@ import { useActionState, useState, useTransition, type FormEvent } from "react";
 import { Calculator, Check, Save, TriangleAlert } from "lucide-react";
 import { Button, Field, ScorePicker, Section, Select, TextArea, TextInput, buttonClass } from "@/components/ui";
 import { ENOTE_MERE, STATUSI, type Sifranti } from "@/lib/sifranti";
-import type { OpremaVrstica } from "@/lib/types";
+import { danes } from "@/lib/datum";
+import type { OpremaVrstica, ZapisKartoteke } from "@/lib/types";
 import { shraniOpremo, type ShraniStanje } from "./actions";
+import { Kartoteka } from "./Kartoteka";
 
 const GARANCIJE = [0, 6, 12, 24, 36];
 const oznakaGarancije = (m: number) =>
   m === 0 ? "Brez" : m % 12 === 0 ? `${m / 12} ${m === 12 ? "leto" : m === 24 ? "leti" : "leta"}` : `${m} mesecev`;
 
-const danes = () => new Date().toLocaleDateString("sv-SE"); // lokalni datum v obliki LLLL-MM-DD
 const niz = (v: string | number | null | undefined) => (v === null || v === undefined ? "" : String(v));
 
-export function OpremaObrazec({ oprema, sifranti }: { oprema?: OpremaVrstica; sifranti: Sifranti }) {
+export function OpremaObrazec({
+  oprema,
+  sifranti,
+  kartoteka,
+}: {
+  oprema?: OpremaVrstica;
+  sifranti: Sifranti;
+  kartoteka?: ZapisKartoteke[];
+}) {
   const novo = !oprema;
   const [stanje, formAction, shranjujem] = useActionState<ShraniStanje, FormData>(shraniOpremo, {});
   const [, startTransition] = useTransition();
@@ -145,10 +154,10 @@ export function OpremaObrazec({ oprema, sifranti }: { oprema?: OpremaVrstica; si
               />
               <Button
                 type="button"
-                variant="neutral"
+                variant="brand"
                 size="icon"
                 disabled={izracunana === null}
-                title="Izračunaj iz cene nove in rabata"
+                title="Izračunaj prodajno ceno iz cene nove in rabata"
                 onClick={() => izracunana !== null && setProdajnaCena(String(izracunana))}
               >
                 <Calculator size={18} />
@@ -164,6 +173,8 @@ export function OpremaObrazec({ oprema, sifranti }: { oprema?: OpremaVrstica; si
         </div>
       </Section>
 
+      <Kartoteka idOprema={oprema?.id_oprema} zacetniZapisi={kartoteka} />
+
       <div className="sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-line bg-surface/95 px-4 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.05)] backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
         {stanje.sporocilo && (
           <p
@@ -175,10 +186,19 @@ export function OpremaObrazec({ oprema, sifranti }: { oprema?: OpremaVrstica; si
           </p>
         )}
         <div className="ml-auto flex gap-2">
-          <Link href="/" className={buttonClass("neutral")}>
+          <Link
+            href="/"
+            className={buttonClass("brand")}
+            title="Prekliči neshranjene spremembe in se vrni na seznam opreme"
+          >
             Prekliči
           </Link>
-          <Button type="submit" variant="ok" disabled={shranjujem}>
+          <Button
+            type="submit"
+            variant="ok"
+            disabled={shranjujem}
+            title={novo ? "Shrani novo rabljeno opremo v bazo" : "Shrani spremembe rabljene opreme"}
+          >
             <Save size={18} />
             {shranjujem ? "Shranjujem ..." : novo ? "Dodaj opremo" : "Shrani"}
           </Button>

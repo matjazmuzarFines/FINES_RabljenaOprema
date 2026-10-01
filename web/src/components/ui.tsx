@@ -9,29 +9,38 @@ import type {
   TextareaHTMLAttributes,
 } from "react";
 
-type Variant = "brand" | "ok" | "danger" | "info" | "neutral";
+/*
+ * Barve gumbov (rbo_instructions.md):
+ * - brand (oranžna): funkcija samo na strani (navigacija, Nazaj, Izhod, filtri, izračun)
+ * - ok (zelena): dodaj / shrani / naloži v bazo
+ * - danger (rdeča): izbriši / odstrani
+ * - info (modra): prenos PDF, osvežitev, zunanje funkcije
+ * Belih gumbov ni. Vsak gumb mora imeti title (namig ob prehodu z miško).
+ */
+type Variant = "brand" | "ok" | "danger" | "info";
 
 const variantClass: Record<Variant, string> = {
   brand: "bg-brand text-white hover:bg-brand-hover active:bg-brand-pressed",
   ok: "bg-ok text-white hover:bg-ok-hover",
   danger: "bg-danger text-white hover:bg-danger-hover",
   info: "bg-info text-white hover:bg-info-hover",
-  neutral: "bg-surface text-ink border border-line hover:bg-canvas",
 };
 
-type Size = "md" | "sm" | "icon" | "iconSm";
+type Size = "md" | "sm" | "icon" | "iconSm" | "iconXs";
 
 const sizeClass: Record<Size, string> = {
   md: "h-11 gap-2 px-5 text-[15px]",
   sm: "h-9 gap-1.5 px-3 text-sm",
   icon: "h-11 w-11 shrink-0",
   iconSm: "h-9 w-9 shrink-0",
+  iconXs: "h-7 w-7 shrink-0",
 };
 
 export const buttonClass = (variant: Variant = "brand", size: Size = "md") =>
   `inline-flex items-center justify-center rounded-lg font-semibold shadow-sm transition-colors ` +
   `focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ` +
   `disabled:cursor-not-allowed disabled:bg-[#dcdcdc] disabled:text-ink-faint disabled:border-transparent ` +
+  `disabled:shadow-none disabled:hover:bg-[#dcdcdc] ` +
   `${sizeClass[size]} ${variantClass[variant]}`;
 
 export function Button({
@@ -39,7 +48,7 @@ export function Button({
   size = "md",
   className = "",
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: Size }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: Size; title: string }) {
   return <button {...props} className={`${buttonClass(variant, size)} ${className}`} />;
 }
 
@@ -84,15 +93,27 @@ export function TextArea({ className = "", ...props }: TextareaHTMLAttributes<HT
 }
 
 // Razdelek obrazca (kartica z naslovom)
-export function Section({ title, children, className = "" }: { title: string; children: ReactNode; className?: string }) {
+export function Section({
+  title,
+  actions,
+  children,
+  className = "",
+}: {
+  title: string;
+  actions?: ReactNode;
+  children: ReactNode;
+  className?: string;
+}) {
   return (
     <section className={`rounded-xl border border-line bg-surface p-4 shadow-sm sm:p-5 ${className}`}>
-      <h2 className="mb-4 border-l-4 border-brand pl-3 text-lg font-bold text-ink">{title}</h2>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="border-l-4 border-brand pl-3 text-lg font-bold text-ink">{title}</h2>
+        {actions}
+      </div>
       {children}
     </section>
   );
 }
-
 export function Select({
   options,
   placeholder = "Vse",
@@ -121,16 +142,19 @@ export function Toggle({
   checked,
   onChange,
   label,
+  title,
 }: {
   checked: boolean;
   onChange: (v: boolean) => void;
   label: string;
+  title: string;
 }) {
   return (
     <button
       type="button"
       role="switch"
       aria-checked={checked}
+      title={title}
       onClick={() => onChange(!checked)}
       className="inline-flex cursor-pointer select-none items-center gap-3"
     >
@@ -198,6 +222,7 @@ export function ScorePicker({
             type="button"
             role="radio"
             aria-checked={value === i}
+            title={value === i ? "Odstrani oceno stanja" : `Ocena stanja ${i} od 6`}
             onClick={() => onChange(value === i ? null : i)}
             className={`h-11 w-11 border-r border-line text-[15px] font-semibold last:border-r-0 transition-colors ${
               value !== null && i <= value ? "bg-brand text-white" : "bg-surface text-ink hover:bg-brand-soft"

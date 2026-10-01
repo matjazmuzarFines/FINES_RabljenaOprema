@@ -1,6 +1,6 @@
 // Pomanjša sliko v brskalniku (najdaljša stranica max 1920 px) in jo pretvori v JPG.
 // Upošteva EXIF orientacijo (slike s telefona niso zasukane).
-export async function pripraviSliko(datoteka: File, maxStranica = 1920, kakovost = 0.85): Promise<Blob> {
+export async function pripraviSliko(datoteka: Blob, maxStranica = 1920, kakovost = 0.85): Promise<Blob> {
   let bitmap: ImageBitmap;
   try {
     bitmap = await createImageBitmap(datoteka, { imageOrientation: "from-image" });

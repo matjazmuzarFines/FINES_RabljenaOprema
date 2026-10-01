@@ -10,12 +10,14 @@ export function AppShell({
   title,
   subtitle,
   back,
+  backTitle = "Nazaj na seznam rabljene opreme",
   actions,
   children,
 }: {
   title: string;
   subtitle?: string;
   back?: string; // URL za gumb Nazaj; brez njega (domača stran) gumba ni
+  backTitle?: string; // namig za gumb Nazaj
   actions?: ReactNode;
   children: ReactNode;
 }) {
@@ -23,18 +25,23 @@ export function AppShell({
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-20 border-t-[3px] border-brand bg-surface/95 shadow-sm backdrop-blur">
         <div className="mx-auto flex h-16 w-full max-w-[1800px] items-center gap-3 px-4 sm:px-6">
-          <Link href="/" aria-label="FINES – domača stran" className="shrink-0">
+          <Link href="/" aria-label="FINES – domača stran" title="Na domačo stran (seznam opreme)" className="shrink-0">
             <Image src="/fines-logo.png" alt="FINES d.o.o. logotip" width={136} height={36} priority />
           </Link>
           <div className="ml-auto flex items-center gap-2">
             {back && (
-              <Link href={back} className={buttonClass("neutral")}>
+              <Link href={back} className={buttonClass("brand")} title={backTitle} aria-label={backTitle}>
                 <ChevronLeft size={18} />
                 <span className="hidden sm:inline">Nazaj</span>
               </Link>
             )}
             <form action={odjava}>
-              <button type="submit" className={buttonClass("neutral")} title="Odjava iz aplikacije">
+              <button
+                type="submit"
+                className={buttonClass("brand")}
+                title="Odjava in izhod iz aplikacije"
+                aria-label="Odjava in izhod iz aplikacije"
+              >
                 <LogOut size={18} />
                 <span className="hidden sm:inline">Izhod</span>
               </button>

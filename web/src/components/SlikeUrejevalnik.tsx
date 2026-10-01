@@ -5,25 +5,8 @@ import { Camera, ImagePlus, Images, Loader2, RefreshCw, Trash2, Upload } from "l
 import { Section, buttonClass } from "@/components/ui";
 import { SLIKE_BUCKET } from "@/lib/config";
 import { pripraviSliko } from "@/lib/pripraviSliko";
-import { potSlike } from "@/lib/slike";
+import { MESTA_SLIK, imeDatoteke, potSlike, type ObstojecaSlika, type VrstaSlike } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/client";
-
-export type VrstaSlike = "Predstavna" | "Slika1" | "Slika2" | "Slika3" | "Slika4" | "Slika5" | "Slika6";
-export type ObstojecaSlika = { ime: string; url: string | null };
-
-const MESTA: { vrsta: VrstaSlike; naslov: string; namig: string }[] = [
-  { vrsta: "Predstavna", naslov: "Predstavna slika", namig: "Zunanjost – zaprta peč" },
-  { vrsta: "Slika1", naslov: "Slika 1", namig: "Notranjost" },
-  { vrsta: "Slika2", naslov: "Slika 2", namig: "Serijska tablica" },
-  { vrsta: "Slika3", naslov: "Slika 3", namig: "Dodatna slika" },
-  { vrsta: "Slika4", naslov: "Slika 4", namig: "Dodatna slika" },
-  { vrsta: "Slika5", naslov: "Slika 5", namig: "Dodatna slika" },
-  { vrsta: "Slika6", naslov: "Slika 6", namig: "Dodatna slika" },
-];
-
-// Poimenovanje datotek kot v Power Apps / SharePoint: "{ID} - predstavna.jpg", "{ID} - Slika{n}.jpg"
-const imeDatoteke = (id: number, vrsta: VrstaSlike) =>
-  vrsta === "Predstavna" ? `${id} - predstavna.jpg` : `${id} - ${vrsta}.jpg`;
 
 // Telefon/tablica (prst kot glavni kazalec): ponudimo Kamera + Galerija; na računalniku samo nalaganje datoteke.
 const DOTIK = "(pointer: coarse)";
@@ -39,15 +22,17 @@ function useNapravaNaDotik() {
   );
 }
 
-// Gumb pod sliko: na ozkih poljih samo ikona, na širših še besedilo
+// Gumb pod sliko (zelen = shrani v bazo): na ozkih poljih samo ikona, na širših še besedilo
 function GumbSlike({
   ikona,
   besedilo,
+  namig,
   onClick,
   disabled,
 }: {
   ikona: ReactNode;
   besedilo: string;
+  namig: string;
   onClick: () => void;
   disabled?: boolean;
 }) {
@@ -56,9 +41,9 @@ function GumbSlike({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      title={besedilo}
-      aria-label={besedilo}
-      className={`${buttonClass("neutral", "sm")} min-w-0 flex-1`}
+      title={namig}
+      aria-label={namig}
+      className={`${buttonClass("ok", "sm")} min-w-0 flex-1`}
     >
       {ikona}
       <span className="hidden truncate @[15rem]:inline">{besedilo}</span>
@@ -66,30 +51,38 @@ function GumbSlike({
   );
 }
 
+/** Mreža slik opreme; vsaka slika se ob izbiri takoj naloži v Storage in zapiše v rbo_slike. */
 export function SlikeUrejevalnik({
   idOprema,
   slike,
+  vrste,
+  naslov = "Slike",
+  velika = "Predstavna",
 }: {
   idOprema: number;
   slike: Partial<Record<VrstaSlike, ObstojecaSlika>>;
+  vrste: VrstaSlike[];
+  naslov?: string;
+  velika?: VrstaSlike; // ta slika je čez celo širino
 }) {
   const [stanje, setStanje] = useState(slike);
   const nastavi = (vrsta: VrstaSlike, s: ObstojecaSlika | undefined) => setStanje((p) => ({ ...p, [vrsta]: s }));
+  const mesta = MESTA_SLIK.filter((m) => vrste.includes(m.vrsta));
 
   return (
-    <Section title="Slike">
+    <Section title={naslov}>
       <p className="-mt-2 mb-4 text-sm text-ink-muted">
         Slika se shrani takoj. Na računalniku jo lahko povlečeš na polje, na telefonu ali tablici jo posnameš s kamero.
       </p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        {MESTA.map((m) => (
+        {mesta.map((m) => (
           <MestoSlike
             key={m.vrsta}
             {...m}
             idOprema={idOprema}
             slika={stanje[m.vrsta]}
             onSpremeni={(s) => nastavi(m.vrsta, s)}
-            velika={m.vrsta === "Predstavna"}
+            velika={m.vrsta === velika || mesta.length === 1}
           />
         ))}
       </div>
@@ -120,6 +113,7 @@ function MestoSlike({
   const [delam, setDelam] = useState<"nalagam" | "brisem" | null>(null);
   const [napaka, setNapaka] = useState<string | null>(null);
   const [vlecem, setVlecem] = useState(false);
+  const kaj = naslov.toLowerCase(); // npr. "predstavna slika", "slika 3", "slika krmiljenja"
 
   async function nalozi(datoteka: File | undefined) {
     if (!datoteka) return;
@@ -153,6 +147,7 @@ function MestoSlike({
     } finally {
       setDelam(null);
       if (vnos.current) vnos.current.value = "";
+      if (kamera.current) kamera.current.value = "";
     }
   }
 
@@ -197,7 +192,7 @@ function MestoSlike({
         }`}
       >
         {slika?.url ? (
-          <a href={slika.url} target="_blank" rel="noreferrer" title="Odpri v polni velikosti">
+          <a href={slika.url} target="_blank" rel="noreferrer" title={`Odpri ${kaj} v polni velikosti`}>
             {/* eslint-disable-next-line @next/next/no-img-element -- podpisani Supabase URL / lokalni predogled */}
             <img src={slika.url} alt={naslov} className="h-full w-full object-cover" />
           </a>
@@ -205,6 +200,7 @@ function MestoSlike({
           <button
             type="button"
             onClick={() => vnos.current?.click()}
+            title={`Naloži ${kaj} opreme`}
             className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-faint hover:text-brand"
           >
             <ImagePlus size={velika ? 36 : 26} />
@@ -232,13 +228,26 @@ function MestoSlike({
       <div className="@container flex w-full gap-2">
         {dotik ? (
           <>
-            <GumbSlike ikona={<Camera size={16} />} besedilo="Kamera" disabled={!!delam} onClick={() => kamera.current?.click()} />
-            <GumbSlike ikona={<Images size={16} />} besedilo="Galerija" disabled={!!delam} onClick={() => vnos.current?.click()} />
+            <GumbSlike
+              ikona={<Camera size={16} />}
+              besedilo="Kamera"
+              namig={`Posnemi ${kaj} opreme s fotoaparatom`}
+              disabled={!!delam}
+              onClick={() => kamera.current?.click()}
+            />
+            <GumbSlike
+              ikona={<Images size={16} />}
+              besedilo="Galerija"
+              namig={`Izberi ${kaj} opreme iz galerije`}
+              disabled={!!delam}
+              onClick={() => vnos.current?.click()}
+            />
           </>
         ) : (
           <GumbSlike
             ikona={slika ? <RefreshCw size={16} /> : <Upload size={16} />}
             besedilo={slika ? "Zamenjaj" : "Naloži"}
+            namig={slika ? `Zamenjaj ${kaj} opreme` : `Naloži ${kaj} opreme`}
             disabled={!!delam}
             onClick={() => vnos.current?.click()}
           />
@@ -248,8 +257,8 @@ function MestoSlike({
             type="button"
             disabled={!!delam}
             onClick={odstrani}
-            title="Odstrani sliko"
-            aria-label="Odstrani sliko"
+            title={`Odstrani ${kaj} opreme`}
+            aria-label={`Odstrani ${kaj} opreme`}
             className={buttonClass("danger", "iconSm")}
           >
             <Trash2 size={16} />

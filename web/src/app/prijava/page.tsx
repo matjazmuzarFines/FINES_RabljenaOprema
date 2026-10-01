@@ -61,7 +61,7 @@ export default function PrijavaPage() {
               onChange={(e) => setGeslo(e.target.value)}
             />
           </Field>
-          <Button type="submit" disabled={nalaganje}>
+          <Button type="submit" disabled={nalaganje} title="Prijava v aplikacijo Rabljena oprema">
             {nalaganje ? "Prijavljam ..." : "Prijava"}
           </Button>
         </form>

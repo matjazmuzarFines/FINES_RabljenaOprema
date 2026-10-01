@@ -20,7 +20,8 @@ export function IzbrisiGumb({ idOprema, naziv }: { idOprema: number; naziv: stri
 
   return (
     <div className="flex flex-col items-end gap-1">
-      <Button variant="danger" onClick={izbrisi} disabled={brisem}>
+      <Button variant="danger" onClick={izbrisi} disabled={brisem} title="Izbriši rabljeno opremo s seznama">
+
         <Trash2 size={18} />
         {brisem ? "Brišem ..." : "Izbriši"}
       </Button>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { ImageOff, RefreshCw, RotateCcw } from "lucide-react";
+import { EmailGumb, PdfGumb } from "@/components/PdfGumb";
 import { Button, Field, Score, Select, StatusBadge, TextInput, Toggle } from "@/components/ui";
 import type { OpremaSSliko } from "@/lib/types";
 
@@ -74,9 +75,11 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
 
   return (
     <div className="flex flex-col gap-5">
+      {/* suppressHydrationWarning: upravitelji gesel (npr. Proton Pass) dodajo filtrom svoje atribute */}
       <section
         aria-label="Filtri"
         className="rounded-xl border border-line bg-surface p-4 shadow-sm sm:p-5"
+        suppressHydrationWarning
       >
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6">
           <Field label="ID">
@@ -115,13 +118,23 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
           </Field>
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Toggle checked={filtri.prikaziProdano} onChange={(v) => nastavi("prikaziProdano", v)} label="Prikaži prodano" />
+          <Toggle
+            checked={filtri.prikaziProdano}
+            onChange={(v) => nastavi("prikaziProdano", v)}
+            label="Prikaži prodano"
+            title={filtri.prikaziProdano ? "Skrij prodano opremo" : "Prikaži tudi prodano opremo"}
+          />
           <div className="ml-auto flex flex-wrap gap-2">
-            <Button variant="neutral" onClick={() => setFiltri(PRAZNI_FILTRI)}>
+            <Button variant="brand" onClick={() => setFiltri(PRAZNI_FILTRI)} title="Počisti vse filtre in prikaži vso opremo">
               <RotateCcw size={16} />
               Ponastavi filtre
             </Button>
-            <Button variant="neutral" disabled={osvezujem} onClick={() => startOsvezitev(() => router.refresh())}>
+            <Button
+              variant="info"
+              disabled={osvezujem}
+              onClick={() => startOsvezitev(() => router.refresh())}
+              title="Ponovno naloži opremo in slike iz baze"
+            >
               <RefreshCw size={16} className={osvezujem ? "animate-spin" : ""} />
               {osvezujem ? "Osvežujem ..." : "Osveži podatke"}
             </Button>
@@ -152,14 +165,20 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
 
 function OpremaKartica({ o }: { o: OpremaSSliko }) {
   const prodano = o.status_prodaje === PRODANO;
+  // Celotna kartica je klikljiva (povezava čez celo kartico); gumba PDF sta nad povezavo (z-10)
   return (
-    <Link
-      href={`/oprema/${o.id_oprema}`}
-      className={`group flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition ` +
-        `hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-visible:outline-2 focus-visible:outline-brand ` +
+    <article
+      className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition ` +
+        `hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-within:border-brand ` +
         (prodano ? "opacity-70" : "")}
     >
-      <div className="relative aspect-[4/3] bg-[#f1efec]">
+      <Link
+        href={`/oprema/${o.id_oprema}`}
+        className="absolute inset-0 z-0 rounded-xl focus-visible:outline-2 focus-visible:outline-brand"
+        title={`Odpri in uredi opremo ID ${o.id_oprema}`}
+        aria-label={`Uredi opremo ${o.oprema_naziv} (ID ${o.id_oprema})`}
+      />
+      <div className="pointer-events-none relative aspect-[4/3] bg-[#f1efec]">
         {o.slika_url ? (
           // eslint-disable-next-line @next/next/no-img-element -- podpisani Supabase URL-ji
           <img src={o.slika_url} alt={o.oprema_naziv} loading="lazy" className="h-full w-full object-cover" />
@@ -177,10 +196,30 @@ function OpremaKartica({ o }: { o: OpremaSSliko }) {
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-4">
-        <div>
-          <h2 className="text-lg font-bold leading-snug text-ink group-hover:text-brand">{o.oprema_naziv}</h2>
-          {o.skupina_opreme && <p className="text-sm text-ink-muted">{o.skupina_opreme}</p>}
+      <div className="pointer-events-none relative flex flex-1 flex-col gap-3 p-4">
+        <div className="flex flex-wrap items-start justify-end gap-3">
+          <div className="min-w-[9rem] flex-1">
+            <h2 className="break-words text-lg font-bold leading-snug text-ink group-hover:text-brand">{o.oprema_naziv}</h2>
+            {o.skupina_opreme && <p className="text-sm text-ink-muted">{o.skupina_opreme}</p>}
+          </div>
+          <div className="pointer-events-auto relative z-10 flex shrink-0 gap-1.5">
+            <PdfGumb vrsta="osnovni" idOprema={o.id_oprema} size="iconSm" />
+            <PdfGumb
+              vrsta="kartoteka"
+              idOprema={o.id_oprema}
+              size="iconSm"
+              disabled={!o.ima_kartoteko}
+              namig={o.ima_kartoteko ? undefined : "Kartoteka opreme nima zapisov"}
+            />
+            <PdfGumb
+              vrsta="tehnicni-list"
+              idOprema={o.id_oprema}
+              size="iconSm"
+              disabled={!o.ima_tehnicni_list}
+              namig={o.ima_tehnicni_list ? undefined : "Tehnični list ni izpolnjen"}
+            />
+            <EmailGumb idOprema={o.id_oprema} size="iconSm" />
+          </div>
         </div>
         <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
           <dt className="text-ink-muted">Ident</dt>
@@ -198,6 +237,6 @@ function OpremaKartica({ o }: { o: OpremaSSliko }) {
           <p className="line-clamp-3 border-t border-line pt-3 text-sm italic text-ink-muted">{o.komentar}</p>
         )}
       </div>
-    </Link>
+    </article>
   );
 }

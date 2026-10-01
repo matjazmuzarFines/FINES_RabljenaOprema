@@ -29,7 +29,7 @@ export default async function HomePage() {
       title="Rabljena oprema"
       subtitle="Upravljanje in pregled rabljene Fines opreme"
       actions={
-        <Link href="/dodaj" className={buttonClass("ok")}>
+        <Link href="/dodaj" className={buttonClass("ok")} title="Dodaj novo rabljeno opremo na seznam">
           <Plus size={18} />
           Dodaj rabljeno opremo
         </Link>
