@@ -6,6 +6,7 @@ import { PdfGumb } from "@/components/PdfGumb";
 import { Button, Field, Section, TextArea, TextInput } from "@/components/ui";
 import { danes, prikazDatuma } from "@/lib/datum";
 import type { ZapisKartoteke } from "@/lib/types";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 import { dodajZapisKartoteke, izbrisiKartoteko, izbrisiZapisKartoteke } from "./actions";
 
 const evri = (n: number) => n.toLocaleString("sl-SI", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
@@ -22,7 +23,15 @@ const urejeno = (zapisi: ZapisKartoteke[]) =>
  * - Obstoječa oprema (podan idOprema): "Dodaj zapis" takoj shrani v bazo; na voljo je prenos PDF.
  * - Nova oprema: zapisi so lokalni v skritem polju "kartoteka" in se shranijo skupaj z opremo.
  */
-export function Kartoteka({ idOprema, zacetniZapisi = [] }: { idOprema?: number; zacetniZapisi?: ZapisKartoteke[] }) {
+export function Kartoteka({
+  idOprema,
+  zacetniZapisi = [],
+  samoOgled = false,
+}: {
+  idOprema?: number;
+  zacetniZapisi?: ZapisKartoteke[];
+  samoOgled?: boolean; // brez pravic urejanja: samo pregled in PDF
+}) {
   const [zapisi, setZapisi] = useState(zacetniZapisi);
   const [datum, setDatum] = useState(danes);
   const [besedilo, setBesedilo] = useState("");
@@ -105,8 +114,8 @@ export function Kartoteka({ idOprema, zacetniZapisi = [] }: { idOprema?: number;
             type="button"
             variant="danger"
             onClick={izbrisiVse}
-            disabled={shranjujem || zapisi.length === 0}
-            title="Izbriši celotno kartoteko opreme (vse zapise)"
+            disabled={shranjujem || zapisi.length === 0 || samoOgled}
+            title={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši celotno kartoteko opreme (vse zapise)"}
           >
             <Trash2 size={18} />
             Izbriši
@@ -117,6 +126,7 @@ export function Kartoteka({ idOprema, zacetniZapisi = [] }: { idOprema?: number;
       {lokalno && <input type="hidden" name="kartoteka" value={JSON.stringify(zapisi)} />}
 
       {/* Vnosna polja nimajo atributa name, zato se ne oddajo z obrazcem opreme */}
+      <fieldset disabled={samoOgled} className="contents">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-[12rem_12rem_minmax(0,1fr)]">
         <Field label="Datum vnosa">
           <TextInput type="date" value={datum} onChange={(e) => setDatum(e.target.value)} />
@@ -143,12 +153,19 @@ export function Kartoteka({ idOprema, zacetniZapisi = [] }: { idOprema?: number;
           variant="ok"
           onClick={dodaj}
           disabled={shranjujem}
-          title={lokalno ? "Dodaj zapis v kartoteko (shrani se skupaj z novo opremo)" : "Dodaj in shrani zapis v kartoteko opreme"}
+          title={
+            samoOgled
+              ? NAMIG_SAMO_OGLED
+              : lokalno
+                ? "Dodaj zapis v kartoteko (shrani se skupaj z novo opremo)"
+                : "Dodaj in shrani zapis v kartoteko opreme"
+          }
         >
           <Plus size={18} />
           {shranjujem ? "Shranjujem ..." : "Dodaj zapis"}
         </Button>
       </div>
+      </fieldset>
 
       <div className="mt-5 border-t border-line pt-4">
         {skupaj > 0 && (
@@ -188,8 +205,8 @@ export function Kartoteka({ idOprema, zacetniZapisi = [] }: { idOprema?: number;
                   variant="danger"
                   size="iconXs"
                   onClick={() => izbrisiZapis(z)}
-                  disabled={shranjujem}
-                  title={`Izbriši zapis kartoteke z dne ${prikazDatuma(z.datum_vnosa)}`}
+                  disabled={shranjujem || samoOgled}
+                  title={samoOgled ? NAMIG_SAMO_OGLED : `Izbriši zapis kartoteke z dne ${prikazDatuma(z.datum_vnosa)}`}
                   aria-label={`Izbriši zapis z dne ${prikazDatuma(z.datum_vnosa)}`}
                 >
                   <Trash2 size={14} />

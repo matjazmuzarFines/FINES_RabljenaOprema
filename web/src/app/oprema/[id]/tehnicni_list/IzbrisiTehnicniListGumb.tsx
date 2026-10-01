@@ -4,8 +4,17 @@ import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui";
 import { izbrisiTehnicniList } from "@/app/oprema/actions";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 
-export function IzbrisiTehnicniListGumb({ idOprema, obstaja }: { idOprema: number; obstaja: boolean }) {
+export function IzbrisiTehnicniListGumb({
+  idOprema,
+  obstaja,
+  samoOgled,
+}: {
+  idOprema: number;
+  obstaja: boolean;
+  samoOgled: boolean;
+}) {
   const [brisem, startBrisanje] = useTransition();
 
   function izbrisi() {
@@ -21,8 +30,14 @@ export function IzbrisiTehnicniListGumb({ idOprema, obstaja }: { idOprema: numbe
       type="button"
       variant="danger"
       onClick={izbrisi}
-      disabled={brisem || !obstaja}
-      title={obstaja ? "Izbriši celoten tehnični list in sliko krmiljenja" : "Tehnični list še ni shranjen"}
+      disabled={brisem || !obstaja || samoOgled}
+      title={
+        samoOgled
+          ? NAMIG_SAMO_OGLED
+          : obstaja
+            ? "Izbriši celoten tehnični list in sliko krmiljenja"
+            : "Tehnični list še ni shranjen"
+      }
     >
       <Trash2 size={18} />
       {brisem ? "Brišem ..." : "Izbriši"}

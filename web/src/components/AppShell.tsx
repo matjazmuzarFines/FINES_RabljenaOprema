@@ -1,12 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ChevronLeft, LogOut } from "lucide-react";
+import { ChevronLeft, Eye, LogOut } from "lucide-react";
 import { odjava } from "@/app/actions";
 import { buttonClass } from "@/components/ui";
+import { createClient } from "@/lib/supabase/server";
+import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
 
 // Okvir vsake strani: Fines logo, gumb Nazaj (razen domače strani), gumb Izhod.
-export function AppShell({
+export async function AppShell({
   title,
   subtitle,
   back,
@@ -21,6 +23,7 @@ export function AppShell({
   actions?: ReactNode;
   children: ReactNode;
 }) {
+  const samoOgled = await jeSamoOgled(await createClient());
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-20 border-t-[3px] border-brand bg-surface/95 shadow-sm backdrop-blur">
@@ -28,6 +31,15 @@ export function AppShell({
           <Link href="/" aria-label="FINES – domača stran" title="Na domačo stran (seznam opreme)" className="shrink-0">
             <Image src="/fines-logo.png" alt="FINES d.o.o. logotip" width={136} height={36} priority />
           </Link>
+          {samoOgled && (
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#ececec] px-3 py-1 text-xs font-semibold text-ink-muted"
+              title={NAMIG_SAMO_OGLED}
+            >
+              <Eye size={14} />
+              Samo ogled
+            </span>
+          )}
           <div className="ml-auto flex items-center gap-2">
             {back && (
               <Link href={back} className={buttonClass("brand")} title={backTitle} aria-label={backTitle}>

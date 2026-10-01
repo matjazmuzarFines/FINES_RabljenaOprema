@@ -4,8 +4,9 @@ import { useState, useTransition } from "react";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui";
 import { izbrisiOpremo } from "@/app/oprema/actions";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 
-export function IzbrisiGumb({ idOprema, naziv }: { idOprema: number; naziv: string }) {
+export function IzbrisiGumb({ idOprema, naziv, samoOgled }: { idOprema: number; naziv: string; samoOgled: boolean }) {
   const [brisem, startBrisanje] = useTransition();
   const [napaka, setNapaka] = useState<string | null>(null);
 
@@ -20,7 +21,12 @@ export function IzbrisiGumb({ idOprema, naziv }: { idOprema: number; naziv: stri
 
   return (
     <div className="flex flex-col items-end gap-1">
-      <Button variant="danger" onClick={izbrisi} disabled={brisem} title="Izbriši rabljeno opremo s seznama">
+      <Button
+        variant="danger"
+        onClick={izbrisi}
+        disabled={brisem || samoOgled}
+        title={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši rabljeno opremo s seznama"}
+      >
 
         <Trash2 size={18} />
         {brisem ? "Brišem ..." : "Izbriši"}

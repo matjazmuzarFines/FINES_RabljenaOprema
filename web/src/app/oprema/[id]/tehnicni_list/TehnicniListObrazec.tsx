@@ -6,10 +6,21 @@ import { Check, Save, TriangleAlert } from "lucide-react";
 import { Button, Field, Section, TextArea, TextInput, buttonClass } from "@/components/ui";
 import { shraniTehnicniList, type ShraniStanje } from "@/app/oprema/actions";
 import { TL_SKLOPI, type TehnicniList } from "@/lib/types";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 
 const niz = (v: string | number | null | undefined) => (v === null || v === undefined ? "" : String(v));
 
-export function TehnicniListObrazec({ idOprema, tl, nov }: { idOprema: number; tl: TehnicniList; nov: boolean }) {
+export function TehnicniListObrazec({
+  idOprema,
+  tl,
+  nov,
+  samoOgled = false,
+}: {
+  idOprema: number;
+  tl: TehnicniList;
+  nov: boolean;
+  samoOgled?: boolean; // brez pravic urejanja: vsa polja onemogočena
+}) {
   const [stanje, formAction, shranjujem] = useActionState<ShraniStanje, FormData>(shraniTehnicniList, {});
   const [, startTransition] = useTransition();
 
@@ -24,12 +35,13 @@ export function TehnicniListObrazec({ idOprema, tl, nov }: { idOprema: number; t
     <form onSubmit={oddaj} className="flex flex-col gap-5" noValidate>
       <input type="hidden" name="id_oprema" value={idOprema} />
 
-      {nov && (
+      {nov && !samoOgled && (
         <p className="rounded-xl border border-warn bg-warn-soft px-4 py-3 text-[15px]">
           Tehnični list še ni shranjen. Osnovni podatki so predizpolnjeni iz opreme.
         </p>
       )}
 
+      <fieldset disabled={samoOgled} className="contents">
       {TL_SKLOPI.map((sklop) => (
         <Section key={sklop.naslov} title={sklop.naslov}>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
@@ -52,6 +64,7 @@ export function TehnicniListObrazec({ idOprema, tl, nov }: { idOprema: number; t
           <TextArea name="opis" rows={6} defaultValue={niz(tl.opis)} placeholder="Dodatni opis, posebnosti, oprema ..." />
         </Field>
       </Section>
+      </fieldset>
 
       <div className="sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-line bg-surface/95 px-4 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.05)] backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
         {stanje.sporocilo && (
@@ -68,7 +81,12 @@ export function TehnicniListObrazec({ idOprema, tl, nov }: { idOprema: number; t
           >
             Prekliči
           </Link>
-          <Button type="submit" variant="ok" disabled={shranjujem} title="Shrani tehnični list opreme">
+          <Button
+            type="submit"
+            variant="ok"
+            disabled={shranjujem || samoOgled}
+            title={samoOgled ? NAMIG_SAMO_OGLED : "Shrani tehnični list opreme"}
+          >
             <Save size={18} />
             {shranjujem ? "Shranjujem ..." : "Shrani"}
           </Button>

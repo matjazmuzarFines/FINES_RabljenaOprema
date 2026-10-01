@@ -6,6 +6,7 @@ import { Calculator, Check, Save, TriangleAlert } from "lucide-react";
 import { Button, Field, ScorePicker, Section, Select, TextArea, TextInput, buttonClass } from "@/components/ui";
 import { ENOTE_MERE, STATUSI, type Sifranti } from "@/lib/sifranti";
 import { danes } from "@/lib/datum";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 import type { OpremaVrstica, ZapisKartoteke } from "@/lib/types";
 import { shraniOpremo, type ShraniStanje } from "./actions";
 import { Kartoteka } from "./Kartoteka";
@@ -20,10 +21,12 @@ export function OpremaObrazec({
   oprema,
   sifranti,
   kartoteka,
+  samoOgled = false,
 }: {
   oprema?: OpremaVrstica;
   sifranti: Sifranti;
   kartoteka?: ZapisKartoteke[];
+  samoOgled?: boolean; // uporabnik brez pravic urejanja: vsa polja in gumbi za urejanje so onemogočeni
 }) {
   const novo = !oprema;
   const [stanje, formAction, shranjujem] = useActionState<ShraniStanje, FormData>(shraniOpremo, {});
@@ -58,6 +61,8 @@ export function OpremaObrazec({
       <input type="hidden" name="id_oprema" value={niz(oprema?.id_oprema)} />
       <input type="hidden" name="id_prodaja" value={niz(idProdaja)} />
 
+      {/* fieldset disabled onemogoči vsa polja in gumbe v razdelkih (display: contents ohrani postavitev) */}
+      <fieldset disabled={samoOgled} className="contents">
       <Section title="Osnovni podatki">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
           <Field label="Naziv opreme" required error={napaka("oprema_naziv")} className="sm:col-span-2 2xl:col-span-3">
@@ -172,8 +177,9 @@ export function OpremaObrazec({
           </Field>
         </div>
       </Section>
+      </fieldset>
 
-      <Kartoteka idOprema={oprema?.id_oprema} zacetniZapisi={kartoteka} />
+      <Kartoteka idOprema={oprema?.id_oprema} zacetniZapisi={kartoteka} samoOgled={samoOgled} />
 
       <div className="sticky bottom-0 z-10 -mx-4 flex flex-wrap items-center gap-3 border-t border-line bg-surface/95 px-4 py-3 shadow-[0_-2px_8px_rgba(0,0,0,0.05)] backdrop-blur sm:mx-0 sm:rounded-xl sm:border">
         {stanje.sporocilo && (
@@ -196,8 +202,14 @@ export function OpremaObrazec({
           <Button
             type="submit"
             variant="ok"
-            disabled={shranjujem}
-            title={novo ? "Shrani novo rabljeno opremo v bazo" : "Shrani spremembe rabljene opreme"}
+            disabled={shranjujem || samoOgled}
+            title={
+              samoOgled
+                ? NAMIG_SAMO_OGLED
+                : novo
+                  ? "Shrani novo rabljeno opremo v bazo"
+                  : "Shrani spremembe rabljene opreme"
+            }
           >
             <Save size={18} />
             {shranjujem ? "Shranjujem ..." : novo ? "Dodaj opremo" : "Shrani"}

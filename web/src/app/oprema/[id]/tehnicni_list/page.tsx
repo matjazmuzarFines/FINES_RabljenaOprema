@@ -5,6 +5,7 @@ import { SlikeUrejevalnik } from "@/components/SlikeUrejevalnik";
 import { slikeOpreme } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
 import type { OpremaVrstica, TehnicniList } from "@/lib/types";
+import { jeSamoOgled } from "@/lib/vloga";
 import { IzbrisiTehnicniListGumb } from "./IzbrisiTehnicniListGumb";
 import { TehnicniListObrazec } from "./TehnicniListObrazec";
 
@@ -14,10 +15,11 @@ export default async function TehnicniListPage({ params }: PageProps<"/oprema/[i
   if (!Number.isInteger(idOprema)) notFound();
 
   const supabase = await createClient();
-  const [opremaRes, tlRes, slike] = await Promise.all([
+  const [opremaRes, tlRes, slike, samoOgled] = await Promise.all([
     supabase.from("v_rbo_oprema_prodaja").select("*").eq("id_oprema", idOprema).maybeSingle(),
     supabase.from("rbo_tehnicni_list").select("*").eq("id_oprema", idOprema).eq("visible", true).maybeSingle(),
     slikeOpreme(supabase, idOprema),
+    jeSamoOgled(supabase),
   ]);
   if (opremaRes.error) throw new Error(opremaRes.error.message);
   const oprema = opremaRes.data as OpremaVrstica | null;
@@ -58,13 +60,23 @@ export default async function TehnicniListPage({ params }: PageProps<"/oprema/[i
             disabled={!obstojeci}
             namig={obstojeci ? undefined : "Tehnični list še ni izpolnjen (najprej ga shrani)"}
           />
-          <IzbrisiTehnicniListGumb idOprema={oprema.id_oprema} obstaja={!!obstojeci || !!slike.Krmiljenje} />
+          <IzbrisiTehnicniListGumb
+            idOprema={oprema.id_oprema}
+            obstaja={!!obstojeci || !!slike.Krmiljenje}
+            samoOgled={samoOgled}
+          />
         </div>
       }
     >
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(360px,460px)]">
         {/* key: po izbrisu se obrazec in slika izrišeta na novo (prazna) */}
-        <TehnicniListObrazec key={obstojeci ? "obstojeci" : "nov"} idOprema={oprema.id_oprema} tl={tl} nov={!obstojeci} />
+        <TehnicniListObrazec
+          key={obstojeci ? "obstojeci" : "nov"}
+          idOprema={oprema.id_oprema}
+          tl={tl}
+          nov={!obstojeci}
+          samoOgled={samoOgled}
+        />
         <div className="xl:sticky xl:top-24">
           <SlikeUrejevalnik
             key={slike.Krmiljenje?.ime ?? "brez"}
@@ -73,6 +85,7 @@ export default async function TehnicniListPage({ params }: PageProps<"/oprema/[i
             vrste={["Krmiljenje"]}
             naslov="Slika krmiljenja"
             velika="Krmiljenje"
+            samoOgled={samoOgled}
           />
         </div>
       </div>

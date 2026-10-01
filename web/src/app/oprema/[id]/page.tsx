@@ -9,6 +9,7 @@ import { naloziSifrante } from "@/lib/sifranti";
 import { slikeOpreme } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
 import type { OpremaVrstica, ZapisKartoteke } from "@/lib/types";
+import { jeSamoOgled } from "@/lib/vloga";
 import { IzbrisiGumb } from "./IzbrisiGumb";
 
 export default async function UrediPage({ params, searchParams }: PageProps<"/oprema/[id]">) {
@@ -18,7 +19,7 @@ export default async function UrediPage({ params, searchParams }: PageProps<"/op
   if (!Number.isInteger(idOprema)) notFound();
 
   const supabase = await createClient();
-  const [opremaRes, slike, kartotekaRes, sifranti] = await Promise.all([
+  const [opremaRes, slike, kartotekaRes, sifranti, samoOgled] = await Promise.all([
     supabase.from("v_rbo_oprema_prodaja").select("*").eq("id_oprema", idOprema).maybeSingle(),
     slikeOpreme(supabase, idOprema),
     supabase
@@ -29,6 +30,7 @@ export default async function UrediPage({ params, searchParams }: PageProps<"/op
       .order("datum_vnosa", { ascending: false })
       .order("id", { ascending: false }),
     naloziSifrante(supabase),
+    jeSamoOgled(supabase),
   ]);
   if (opremaRes.error) throw new Error(opremaRes.error.message);
   const oprema = opremaRes.data as OpremaVrstica | null;
@@ -50,7 +52,7 @@ export default async function UrediPage({ params, searchParams }: PageProps<"/op
             Tehnični list
           </Link>
           <StatusBadge status={oprema.status_prodaje} />
-          <IzbrisiGumb idOprema={oprema.id_oprema} naziv={oprema.oprema_naziv} />
+          <IzbrisiGumb idOprema={oprema.id_oprema} naziv={oprema.oprema_naziv} samoOgled={samoOgled} />
         </div>
       }
     >
@@ -77,12 +79,14 @@ export default async function UrediPage({ params, searchParams }: PageProps<"/op
           oprema={oprema}
           sifranti={sifranti}
           kartoteka={(kartotekaRes.data ?? []) as ZapisKartoteke[]}
+          samoOgled={samoOgled}
         />
         <div className="xl:sticky xl:top-24">
           <SlikeUrejevalnik
             idOprema={oprema.id_oprema}
             slike={slike}
             vrste={["Predstavna", "Slika1", "Slika2", "Slika3", "Slika4", "Slika5", "Slika6"]}
+            samoOgled={samoOgled}
           />
         </div>
       </div>

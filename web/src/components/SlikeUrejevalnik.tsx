@@ -7,6 +7,7 @@ import { SLIKE_BUCKET } from "@/lib/config";
 import { pripraviSliko } from "@/lib/pripraviSliko";
 import { MESTA_SLIK, imeDatoteke, potSlike, type ObstojecaSlika, type VrstaSlike } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/client";
+import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 
 // Telefon/tablica (prst kot glavni kazalec): ponudimo Kamera + Galerija; na računalniku samo nalaganje datoteke.
 const DOTIK = "(pointer: coarse)";
@@ -58,12 +59,14 @@ export function SlikeUrejevalnik({
   vrste,
   naslov = "Slike",
   velika = "Predstavna",
+  samoOgled = false,
 }: {
   idOprema: number;
   slike: Partial<Record<VrstaSlike, ObstojecaSlika>>;
   vrste: VrstaSlike[];
   naslov?: string;
   velika?: VrstaSlike; // ta slika je čez celo širino
+  samoOgled?: boolean; // brez pravic urejanja: slike se samo prikazujejo
 }) {
   const [stanje, setStanje] = useState(slike);
   const nastavi = (vrsta: VrstaSlike, s: ObstojecaSlika | undefined) => setStanje((p) => ({ ...p, [vrsta]: s }));
@@ -72,7 +75,9 @@ export function SlikeUrejevalnik({
   return (
     <Section title={naslov}>
       <p className="-mt-2 mb-4 text-sm text-ink-muted">
-        Slika se shrani takoj. Na računalniku jo lahko povlečeš na polje, na telefonu ali tablici jo posnameš s kamero.
+        {samoOgled
+          ? "Klikni sliko za ogled v polni velikosti."
+          : "Slika se shrani takoj. Na računalniku jo lahko povlečeš na polje, na telefonu ali tablici jo posnameš s kamero."}
       </p>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {mesta.map((m) => (
@@ -83,6 +88,7 @@ export function SlikeUrejevalnik({
             slika={stanje[m.vrsta]}
             onSpremeni={(s) => nastavi(m.vrsta, s)}
             velika={m.vrsta === velika || mesta.length === 1}
+            samoOgled={samoOgled}
           />
         ))}
       </div>
@@ -98,6 +104,7 @@ function MestoSlike({
   slika,
   onSpremeni,
   velika,
+  samoOgled,
 }: {
   vrsta: VrstaSlike;
   naslov: string;
@@ -106,6 +113,7 @@ function MestoSlike({
   slika: ObstojecaSlika | undefined;
   onSpremeni: (s: ObstojecaSlika | undefined) => void;
   velika: boolean;
+  samoOgled: boolean;
 }) {
   const vnos = useRef<HTMLInputElement>(null);
   const kamera = useRef<HTMLInputElement>(null);
@@ -170,8 +178,11 @@ function MestoSlike({
   function spusti(e: DragEvent) {
     e.preventDefault();
     setVlecem(false);
-    nalozi(e.dataTransfer.files[0]);
+    if (!samoOgled) nalozi(e.dataTransfer.files[0]);
   }
+
+  const onemogoceno = !!delam || samoOgled;
+  const namigUrejanja = (besedilo: string) => (samoOgled ? NAMIG_SAMO_OGLED : besedilo);
 
   return (
     <div className={`flex flex-col gap-2 ${velika ? "col-span-2 sm:col-span-3" : ""}`}>
@@ -183,7 +194,7 @@ function MestoSlike({
       <div
         onDragOver={(e) => {
           e.preventDefault();
-          setVlecem(true);
+          if (!samoOgled) setVlecem(true);
         }}
         onDragLeave={() => setVlecem(false)}
         onDrop={spusti}
@@ -200,11 +211,14 @@ function MestoSlike({
           <button
             type="button"
             onClick={() => vnos.current?.click()}
-            title={`Naloži ${kaj} opreme`}
-            className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-faint hover:text-brand"
+            disabled={samoOgled}
+            title={namigUrejanja(`Naloži ${kaj} opreme`)}
+            className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-faint enabled:hover:text-brand disabled:cursor-not-allowed"
           >
             <ImagePlus size={velika ? 36 : 26} />
-            <span className="text-xs font-medium">{slika ? "Slike ni v shrambi" : "Dodaj sliko"}</span>
+            <span className="text-xs font-medium">
+              {slika ? "Slike ni v shrambi" : samoOgled ? "Ni slike" : "Dodaj sliko"}
+            </span>
           </button>
         )}
         {delam && (
@@ -231,15 +245,15 @@ function MestoSlike({
             <GumbSlike
               ikona={<Camera size={16} />}
               besedilo="Kamera"
-              namig={`Posnemi ${kaj} opreme s fotoaparatom`}
-              disabled={!!delam}
+              namig={namigUrejanja(`Posnemi ${kaj} opreme s fotoaparatom`)}
+              disabled={onemogoceno}
               onClick={() => kamera.current?.click()}
             />
             <GumbSlike
               ikona={<Images size={16} />}
               besedilo="Galerija"
-              namig={`Izberi ${kaj} opreme iz galerije`}
-              disabled={!!delam}
+              namig={namigUrejanja(`Izberi ${kaj} opreme iz galerije`)}
+              disabled={onemogoceno}
               onClick={() => vnos.current?.click()}
             />
           </>
@@ -247,17 +261,17 @@ function MestoSlike({
           <GumbSlike
             ikona={slika ? <RefreshCw size={16} /> : <Upload size={16} />}
             besedilo={slika ? "Zamenjaj" : "Naloži"}
-            namig={slika ? `Zamenjaj ${kaj} opreme` : `Naloži ${kaj} opreme`}
-            disabled={!!delam}
+            namig={namigUrejanja(slika ? `Zamenjaj ${kaj} opreme` : `Naloži ${kaj} opreme`)}
+            disabled={onemogoceno}
             onClick={() => vnos.current?.click()}
           />
         )}
         {slika && (
           <button
             type="button"
-            disabled={!!delam}
+            disabled={onemogoceno}
             onClick={odstrani}
-            title={`Odstrani ${kaj} opreme`}
+            title={namigUrejanja(`Odstrani ${kaj} opreme`)}
             aria-label={`Odstrani ${kaj} opreme`}
             className={buttonClass("danger", "iconSm")}
           >

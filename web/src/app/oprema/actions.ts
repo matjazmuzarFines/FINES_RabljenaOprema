@@ -8,6 +8,10 @@ import { STATUSI } from "@/lib/sifranti";
 import { potSlike } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
 import { obvestiTeamsNovaOprema } from "@/lib/teams";
+import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
+
+// Odgovor za uporabnika "samo ogled" (ustreza obema oblikama odgovorov akcij)
+const ZAVRNJENO = { ok: false, sporocilo: NAMIG_SAMO_OGLED, napaka: NAMIG_SAMO_OGLED };
 import { TL_SKLOPI, type TehnicniList, type ZapisKartoteke } from "@/lib/types";
 
 export type ShraniStanje = {
@@ -73,6 +77,7 @@ export async function shraniOpremo(_prej: ShraniStanje, fd: FormData): Promise<S
   }
 
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
 
   // 1) Oprema
   let id: number;
@@ -169,6 +174,7 @@ export async function dodajZapisKartoteke(
   if (strosek !== null && !veljavenStrosek(strosek)) return { napaka: "Strošek mora biti pozitivno število." };
 
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
   const { data, error } = await supabase
     .from("rbo_kartoteka")
     .insert({ id_oprema: idOprema, datum_vnosa: datum, besedilo_vnosa: besedilo.trim(), strosek })
@@ -191,6 +197,7 @@ export async function shraniTehnicniList(_prej: ShraniStanje, fd: FormData): Pro
   if (Object.keys(napake).length > 0) return { ok: false, sporocilo: "Preveri označena polja.", napake };
 
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
   const { error } = await supabase
     .from("rbo_tehnicni_list")
     .upsert({ ...tl, leto_izdelave: leto, id_oprema: idOprema, visible: true }, { onConflict: "id_oprema" });
@@ -204,6 +211,7 @@ export async function shraniTehnicniList(_prej: ShraniStanje, fd: FormData): Pro
 // Izbris = skrij (visible = false) opremo in njene prodaje; vrstice ostanejo v bazi.
 export async function izbrisiOpremo(idOprema: number): Promise<{ napaka?: string }> {
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
 
   const { error } = await supabase.from("rbo_oprema").update({ visible: false }).eq("id", idOprema);
   if (error) return { napaka: `Brisanje ni uspelo: ${error.message}` };
@@ -222,6 +230,7 @@ export async function izbrisiOpremo(idOprema: number): Promise<{ napaka?: string
 // Izbris posameznega zapisa kartoteke (visible = false)
 export async function izbrisiZapisKartoteke(id: number): Promise<{ napaka?: string }> {
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
   const { error } = await supabase.from("rbo_kartoteka").update({ visible: false }).eq("id", id);
   return error ? { napaka: `Zapis ni izbrisan: ${error.message}` } : {};
 }
@@ -229,6 +238,7 @@ export async function izbrisiZapisKartoteke(id: number): Promise<{ napaka?: stri
 // Izbris celotne kartoteke opreme (visible = false za vse zapise)
 export async function izbrisiKartoteko(idOprema: number): Promise<{ napaka?: string }> {
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
   const { error } = await supabase.from("rbo_kartoteka").update({ visible: false }).eq("id_oprema", idOprema);
   if (error) return { napaka: `Kartoteka ni izbrisana: ${error.message}` };
   revalidatePath(`/oprema/${idOprema}`);
@@ -238,6 +248,7 @@ export async function izbrisiKartoteko(idOprema: number): Promise<{ napaka?: str
 // Izbris tehničnega lista (visible = false) in slike krmiljenja (datoteka + zapis v rbo_slike)
 export async function izbrisiTehnicniList(idOprema: number): Promise<{ napaka?: string }> {
   const supabase = await createClient();
+  if (await jeSamoOgled(supabase)) return ZAVRNJENO;
   const { error } = await supabase.from("rbo_tehnicni_list").update({ visible: false }).eq("id_oprema", idOprema);
   if (error) return { napaka: `Tehnični list ni izbrisan: ${error.message}` };
 

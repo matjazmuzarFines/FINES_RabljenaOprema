@@ -54,7 +54,8 @@ export function Button({
 
 const fieldClass =
   "h-11 w-full rounded-lg border border-line bg-surface px-3 text-[15px] text-ink shadow-sm " +
-  "placeholder:text-ink-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
+  "placeholder:text-ink-faint focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25 " +
+  "disabled:cursor-not-allowed disabled:bg-[#f3f2f0] disabled:text-ink-muted disabled:shadow-none";
 
 export function Field({
   label,
@@ -224,7 +225,7 @@ export function ScorePicker({
             aria-checked={value === i}
             title={value === i ? "Odstrani oceno stanja" : `Ocena stanja ${i} od 6`}
             onClick={() => onChange(value === i ? null : i)}
-            className={`h-11 w-11 border-r border-line text-[15px] font-semibold last:border-r-0 transition-colors ${
+            className={`h-11 w-11 border-r border-line text-[15px] font-semibold last:border-r-0 transition-colors disabled:cursor-not-allowed ${
               value !== null && i <= value ? "bg-brand text-white" : "bg-surface text-ink hover:bg-brand-soft"
             }`}
           >
