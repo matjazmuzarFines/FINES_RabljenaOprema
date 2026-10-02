@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useSyncExternalStore, type DragEvent, type ReactNode } from "react";
-import { Camera, ImagePlus, Images, Loader2, RefreshCw, Trash2, Upload } from "lucide-react";
+import { Camera, ImagePlus, Images, Loader2, RefreshCw, Trash2, Upload, X } from "lucide-react";
 import { Section, buttonClass } from "@/components/ui";
 import { SLIKE_BUCKET } from "@/lib/config";
 import { pripraviSliko } from "@/lib/pripraviSliko";
@@ -117,6 +117,7 @@ function MestoSlike({
 }) {
   const vnos = useRef<HTMLInputElement>(null);
   const kamera = useRef<HTMLInputElement>(null);
+  const ogled = useRef<HTMLDialogElement>(null);
   const dotik = useNapravaNaDotik();
   const [delam, setDelam] = useState<"nalagam" | "brisem" | null>(null);
   const [napaka, setNapaka] = useState<string | null>(null);
@@ -203,10 +204,15 @@ function MestoSlike({
         }`}
       >
         {slika?.url ? (
-          <a href={slika.url} target="_blank" rel="noreferrer" title={`Odpri ${kaj} v polni velikosti`}>
+          <button
+            type="button"
+            onClick={() => ogled.current?.showModal()}
+            title={`Odpri ${kaj} v polni velikosti`}
+            className="block h-full w-full cursor-zoom-in"
+          >
             {/* eslint-disable-next-line @next/next/no-img-element -- podpisani Supabase URL / lokalni predogled */}
             <img src={slika.url} alt={naslov} className="h-full w-full object-cover" />
-          </a>
+          </button>
         ) : (
           <button
             type="button"
@@ -227,6 +233,34 @@ function MestoSlike({
           </div>
         )}
       </div>
+
+      {/* Ogled v polni velikosti: Esc, X ali klik izven slike (na ozadje) zapre */}
+      {slika?.url && (
+        <dialog
+          ref={ogled}
+          onClick={(e) => e.target === e.currentTarget && ogled.current?.close()}
+          aria-label={naslov}
+          className="m-auto max-h-none max-w-none bg-transparent p-0 backdrop:bg-black/75"
+        >
+          <div className="relative">
+            {/* eslint-disable-next-line @next/next/no-img-element -- podpisani Supabase URL / lokalni predogled */}
+            <img
+              src={slika.url}
+              alt={naslov}
+              className="block max-h-[90dvh] max-w-[calc(100vw-2rem)] rounded-lg object-contain shadow-2xl"
+            />
+            <button
+              type="button"
+              onClick={() => ogled.current?.close()}
+              title="Zapri"
+              aria-label="Zapri"
+              className={`${buttonClass("brand", "iconSm")} absolute top-2 right-2`}
+            >
+              <X size={18} />
+            </button>
+          </div>
+        </dialog>
+      )}
 
       <input ref={vnos} type="file" accept="image/*" className="hidden" onChange={(e) => nalozi(e.target.files?.[0])} />
       {/* capture: telefon/tablica odpre neposredno fotoaparat (zadnjo kamero) */}

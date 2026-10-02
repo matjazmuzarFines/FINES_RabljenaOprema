@@ -17,3 +17,8 @@ Razni funkcijski gumbi in opozorila so seveda druge barve.
 - Razna opozorila rumena
 - Razni synki in ostali funkcijski gumbi ki kličejo zunanje funkcije izven vercel appa so modri
 
+## Baza SQL
+- Podatkov se ne sme brisati. Posložujemo se visible = true/false. Če bo potrebno brisanje bo to izrecno povedano
+- Slike se v večini morajo brisati, zaradi prostora in synca
+- Vsaka tabela mora imeti svoje IDje zaradi povezav. V primeru večih tabel na isti komponenti je potrebno narediti tudi povezovalno tabelo
+- tabele se morajo imenovati: rbo_......, povezovalne tabele so: tl_rbo_...
