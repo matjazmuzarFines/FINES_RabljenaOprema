@@ -3,11 +3,12 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronLeft, Eye, LogOut } from "lucide-react";
 import { odjava } from "@/app/actions";
+import { InfoGumb } from "@/components/InfoGumb";
 import { buttonClass } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
 
-// Okvir vsake strani: Fines logo, gumb Nazaj (razen domače strani), gumb Izhod.
+// Okvir vsake strani: Fines logo, gumb i (spremembe), gumb Nazaj (razen domače strani), gumb Izhod.
 export async function AppShell({
   title,
   subtitle,
@@ -41,6 +42,7 @@ export async function AppShell({
             </span>
           )}
           <div className="ml-auto flex items-center gap-2">
+            <InfoGumb />
             {back && (
               <Link href={back} className={buttonClass("brand")} title={backTitle} aria-label={backTitle}>
                 <ChevronLeft size={18} />

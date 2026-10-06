@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type ComponentType } from "react";
-import { ClipboardList, FileClock, FileImage, Loader2, Mail } from "lucide-react";
+import { ClipboardList, FileArchive, FileClock, FileImage, Loader2, Mail } from "lucide-react";
 import { Button } from "@/components/ui";
 import type { VrstaPdf } from "@/lib/pdf";
 
@@ -91,5 +91,78 @@ export function EmailGumb({ idOprema, size = "icon" }: { idOprema: number; size?
       size={size}
       akcija={async () => (await import("@/lib/pdf")).pripraviEmail(idOprema)}
     />
+  );
+}
+
+// ZIP vseh slik opreme (gumb v naslovu razdelka Slike)
+export function ZipSlikGumb({ idOprema, disabled }: { idOprema: number; disabled?: boolean }) {
+  return (
+    <ModerGumb
+      namig={disabled ? "Oprema nima slik za prenos" : "Prenesi vse slike opreme kot ZIP"}
+      disabled={disabled}
+      Ikona={FileArchive}
+      size="iconSm"
+      akcija={async () => (await import("@/lib/pdf")).prenesiZipSlik(idOprema)}
+    />
+  );
+}
+
+type SkupinskaAkcija = VrstaPdf | "email";
+
+const SKUPINSKO: Record<SkupinskaAkcija, { besedilo: string; namig: string; Ikona: ComponentType<{ size?: number }> }> = {
+  osnovni: { besedilo: "Osnovni podatki", namig: "Prenesi osnovne podatke izbrane opreme (ZIP)", Ikona: FileImage },
+  "tehnicni-list": { besedilo: "Tehnični listi", namig: "Prenesi tehnične liste izbrane opreme (ZIP)", Ikona: ClipboardList },
+  kartoteka: { besedilo: "Kartoteke", namig: "Prenesi kartoteke izbrane opreme (ZIP)", Ikona: FileClock },
+  email: { besedilo: "E-mail", namig: "Pripravi e-mail z dokumenti izbrane opreme", Ikona: Mail },
+};
+
+// Gumbi za izbrano opremo: ZIP PDF-jev po vrsti dokumenta in e-mail z vsemi priponkami.
+// onemogoceno: vrste dokumentov, ki jih nima nobena izbrana oprema (namig pove zakaj).
+export function SkupinskiGumbi({
+  idji,
+  onemogoceno = {},
+}: {
+  idji: number[];
+  onemogoceno?: Partial<Record<SkupinskaAkcija, string>>;
+}) {
+  const [delam, setDelam] = useState<{ akcija: SkupinskaAkcija; opravljeno: number; vseh: number } | null>(null);
+
+  async function izvedi(akcija: SkupinskaAkcija) {
+    setDelam({ akcija, opravljeno: 0, vseh: idji.length });
+    const napredek = (opravljeno: number, vseh: number) => setDelam({ akcija, opravljeno, vseh });
+    try {
+      const pdf = await import("@/lib/pdf");
+      if (akcija === "email") await pdf.pripraviEmail(idji, napredek);
+      else await pdf.prenesiZipPdfjev(akcija, idji, napredek);
+    } catch (e) {
+      alert(`Ni uspelo: ${e instanceof Error ? e.message : e}`);
+    } finally {
+      setDelam(null);
+    }
+  }
+
+  return (
+    <>
+      {(Object.keys(SKUPINSKO) as SkupinskaAkcija[]).map((akcija) => {
+        const { besedilo, namig, Ikona } = SKUPINSKO[akcija];
+        const razlog = onemogoceno[akcija];
+        const tece = delam?.akcija === akcija;
+        return (
+          <Button
+            key={akcija}
+            type="button"
+            variant="info"
+            size="sm"
+            onClick={() => izvedi(akcija)}
+            disabled={!!delam || !!razlog || idji.length === 0}
+            title={razlog ?? namig}
+            aria-label={razlog ?? namig}
+          >
+            {tece ? <Loader2 size={16} className="animate-spin" /> : <Ikona size={16} />}
+            {tece ? `Pripravljam ${Math.min(delam.opravljeno + 1, delam.vseh)}/${delam.vseh}` : besedilo}
+          </Button>
+        );
+      })}
+    </>
   );
 }

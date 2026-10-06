@@ -419,12 +419,80 @@ const USTVARI: Record<VrstaPdf, (p: PodatkiOpreme) => Promise<Blob>> = {
 };
 
 // Ime datoteke samo z ASCII znaki (č -> c ...), da ga razume vsak e-mail odjemalec
-export const imeDatotekePdf = (vrsta: VrstaPdf, o: OpremaVrstica) =>
-  `${PREDPONA[vrsta]}_${o.id_oprema}_${o.oprema_naziv}`
+export const asciiIme = (t: string) =>
+  t
     .normalize("NFD")
     .replace(/[̀-ͯ]/g, "")
     .replace(/[^A-Za-z0-9_-]+/g, "_")
-    .replace(/_+/g, "_") + ".pdf";
+    .replace(/_+/g, "_");
+
+export const imeDatotekePdf = (vrsta: VrstaPdf, o: OpremaVrstica) =>
+  asciiIme(`${PREDPONA[vrsta]}_${o.id_oprema}_${o.oprema_naziv}`) + ".pdf";
+
+// Ali ima oprema podatke za ta dokument (osnovni podatki obstajajo vedno)
+const imaDokument = (vrsta: VrstaPdf, p: PodatkiOpreme) =>
+  vrsta === "osnovni" || (vrsta === "tehnicni-list" ? !!p.tehnicniList : p.kartoteka.length > 0);
+
+type Datoteka = { ime: string; bajti: Uint8Array };
+type Napredek = (opravljeno: number, vseh: number) => void;
+
+// PDF-ji izbranih vrst za več oprem (po vrsti, da brskalnik ne porabi preveč pomnilnika).
+// Oprema brez podatkov za dokument se preskoči.
+async function ustvariPdfje(vrste: VrstaPdf[], idji: number[], napredek?: Napredek) {
+  const datoteke: Datoteka[] = [];
+  const oprema: OpremaVrstica[] = [];
+  for (const [i, id] of idji.entries()) {
+    napredek?.(i, idji.length);
+    const podatki = await naloziPodatkeOpreme(id);
+    oprema.push(podatki.oprema);
+    for (const v of vrste.filter((v) => imaDokument(v, podatki))) {
+      datoteke.push({
+        ime: imeDatotekePdf(v, podatki.oprema),
+        bajti: new Uint8Array(await (await USTVARI[v](podatki)).arrayBuffer()),
+      });
+    }
+  }
+  napredek?.(idji.length, idji.length);
+  return { datoteke, oprema };
+}
+
+async function zip(datoteke: Datoteka[]) {
+  const { zipSync } = await import("fflate");
+  // PDF in JPG sta že stisnjena: shranimo brez dodatnega stiskanja (hitreje)
+  const bajti = zipSync(Object.fromEntries(datoteke.map((d) => [d.ime, [d.bajti, { level: 0 }]])));
+  return new Blob([bajti as BlobPart], { type: "application/zip" });
+}
+
+const ZIP_IME: Record<VrstaPdf, string> = {
+  osnovni: "Osnovni_podatki",
+  kartoteka: "Kartoteke",
+  "tehnicni-list": "Tehnicni_listi",
+};
+
+// ZIP s PDF-ji za vso izbrano opremo; vrne število PDF-jev v ZIP-u
+export async function prenesiZipPdfjev(vrsta: VrstaPdf, idji: number[], napredek?: Napredek) {
+  const { datoteke } = await ustvariPdfje([vrsta], idji, napredek);
+  if (datoteke.length === 0) throw new Error("Nobena izbrana oprema nima podatkov za ta dokument.");
+  prenesiDatoteko(await zip(datoteke), `${ZIP_IME[vrsta]}_${danes()}.zip`);
+  return datoteke.length;
+}
+
+// ZIP vseh slik opreme (izvirna imena datotek)
+export async function prenesiZipSlik(idOprema: number) {
+  const supabase = createClient();
+  const [oprema, slike] = await Promise.all([
+    supabase.from("rbo_oprema").select("oprema_naziv").eq("id_oprema", idOprema).maybeSingle(),
+    slikeOpreme(supabase, idOprema),
+  ]);
+  const datoteke: Datoteka[] = [];
+  for (const m of MESTA_SLIK) {
+    const s = slike[m.vrsta];
+    if (s?.url) datoteke.push({ ime: s.ime, bajti: await naloziBajte(s.url) });
+  }
+  if (datoteke.length === 0) throw new Error("Oprema nima slik.");
+  const naziv = (oprema.data as { oprema_naziv: string } | null)?.oprema_naziv ?? "";
+  prenesiDatoteko(await zip(datoteke), asciiIme(`Slike_${idOprema}_${naziv}`) + ".zip");
+}
 
 export function prenesiDatoteko(blob: Blob, ime: string) {
   const url = URL.createObjectURL(blob);
@@ -456,18 +524,15 @@ function base64(bajti: Uint8Array) {
 const vrstice76 = (b64: string) => b64.replace(/.{1,76}/g, (m) => m + CRLF);
 const utf8Glava = (t: string) => `=?UTF-8?B?${base64(new TextEncoder().encode(t))}?=`;
 
-export async function pripraviEmail(idOprema: number) {
-  const podatki = await naloziPodatkeOpreme(idOprema);
-  const vrste: VrstaPdf[] = ["osnovni"];
-  if (podatki.tehnicniList) vrste.push("tehnicni-list");
-  if (podatki.kartoteka.length > 0) vrste.push("kartoteka");
-
-  const priponke = await Promise.all(
-    vrste.map(async (v) => ({
-      ime: imeDatotekePdf(v, podatki.oprema),
-      bajti: new Uint8Array(await (await USTVARI[v](podatki)).arrayBuffer()),
-    })),
-  );
+// En ali več kosov opreme: vse priponke (brez ZIP) v enem sporočilu
+export async function pripraviEmail(idji: number | number[], napredek?: Napredek) {
+  const seznam = Array.isArray(idji) ? idji : [idji];
+  const { datoteke: priponke, oprema } = await ustvariPdfje(["osnovni", "tehnicni-list", "kartoteka"], seznam, napredek);
+  const zadeva =
+    oprema.length === 1
+      ? oprema[0].oprema_naziv
+      : `Rabljena oprema: ${oprema.slice(0, 3).map((o) => o.oprema_naziv).join(", ")}` +
+        (oprema.length > 3 ? ` in še ${oprema.length - 3}` : "");
 
   const meja = `----=_RBO_${Date.now().toString(36)}`;
   const html =
@@ -478,7 +543,7 @@ export async function pripraviEmail(idOprema: number) {
   const deli = [
     "X-Unsent: 1",
     "To: ",
-    `Subject: ${utf8Glava(podatki.oprema.oprema_naziv)}`,
+    `Subject: ${utf8Glava(zadeva)}`,
     "MIME-Version: 1.0",
     `Content-Type: multipart/mixed; boundary="${meja}"`,
     "",
@@ -499,6 +564,9 @@ export async function pripraviEmail(idOprema: number) {
     "",
   ];
 
-  const ime = imeDatotekePdf("osnovni", podatki.oprema).replace(/^Osnovni_podatki_/, "E-mail_").replace(/\.pdf$/, ".eml");
+  const ime =
+    oprema.length === 1
+      ? asciiIme(`E-mail_${oprema[0].id_oprema}_${oprema[0].oprema_naziv}`) + ".eml"
+      : `E-mail_rabljena_oprema_${danes()}.eml`;
   prenesiDatoteko(new Blob([deli.join(CRLF)], { type: "message/rfc822" }), ime);
 }

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useSyncExternalStore, type DragEvent, type ReactNode } from "react";
 import { Camera, ImagePlus, Images, Loader2, RefreshCw, Trash2, Upload, X } from "lucide-react";
+import { ZipSlikGumb } from "@/components/PdfGumb";
 import { Section, buttonClass } from "@/components/ui";
 import { SLIKE_BUCKET } from "@/lib/config";
 import { pripraviSliko } from "@/lib/pripraviSliko";
@@ -73,7 +74,7 @@ export function SlikeUrejevalnik({
   const mesta = MESTA_SLIK.filter((m) => vrste.includes(m.vrsta));
 
   return (
-    <Section title={naslov}>
+    <Section title={naslov} actions={<ZipSlikGumb idOprema={idOprema} disabled={!Object.values(stanje).some((s) => s?.url)} />}>
       <p className="-mt-2 mb-4 text-sm text-ink-muted">
         {samoOgled
           ? "Klikni sliko za ogled v polni velikosti."

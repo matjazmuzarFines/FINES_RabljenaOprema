@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import { ImageOff, RefreshCw, RotateCcw } from "lucide-react";
-import { EmailGumb, PdfGumb } from "@/components/PdfGumb";
+import { CheckSquare, ImageOff, RefreshCw, RotateCcw, Square, X } from "lucide-react";
+import { EmailGumb, PdfGumb, SkupinskiGumbi } from "@/components/PdfGumb";
 import { Button, Field, Score, Select, StatusBadge, TextInput, Toggle } from "@/components/ui";
 import type { OpremaSSliko } from "@/lib/types";
 
@@ -20,7 +20,10 @@ type Filtri = {
 
 const PRAZNI_FILTRI: Filtri = { id: "", serijska: "", naziv: "", skupina: "", status: "", ocena: "", prikaziProdano: false };
 const KLJUC_FILTROV = "rbo-filtri";
+const KLJUC_IZBORA = "rbo-izbor";
 const PRODANO = "3. PRODANO";
+
+const evri = (n: number) => n.toLocaleString("sl-SI", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " €";
 
 const razlicne = (vrednosti: (string | number | null)[]) =>
   [...new Set(vrednosti.filter((v) => v !== null && v !== "").map(String))].sort((a, b) =>
@@ -31,6 +34,7 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
   const router = useRouter();
   const [osvezujem, startOsvezitev] = useTransition();
   const [filtri, setFiltri] = useState<Filtri>(PRAZNI_FILTRI);
+  const [izbrani, setIzbrani] = useState<number[]>([]);
 
   // Filtri ostanejo nastavljeni ob vrnitvi z urejanja (samo v tem zavihku brskalnika)
   useEffect(() => {
@@ -38,8 +42,15 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
       const shranjeni = sessionStorage.getItem(KLJUC_FILTROV);
       // eslint-disable-next-line react-hooks/set-state-in-effect -- enkratno branje iz sessionStorage ob nalaganju
       if (shranjeni) setFiltri({ ...PRAZNI_FILTRI, ...JSON.parse(shranjeni) });
+      const izbor = sessionStorage.getItem(KLJUC_IZBORA);
+      if (izbor) setIzbrani(JSON.parse(izbor));
     } catch {}
   }, []);
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(KLJUC_IZBORA, JSON.stringify(izbrani));
+    } catch {}
+  }, [izbrani]);
   useEffect(() => {
     try {
       sessionStorage.setItem(KLJUC_FILTROV, JSON.stringify(filtri));
@@ -72,6 +83,22 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
         (filtri.prikaziProdano || o.status_prodaje !== PRODANO),
     );
   }, [oprema, filtri]);
+
+  // Izbor ostane tudi, ko filter opremo skrije; akcije veljajo za vso izbrano opremo
+  const izbranaOprema = useMemo(() => {
+    const ids = new Set(izbrani);
+    return oprema.filter((o) => ids.has(o.id_oprema));
+  }, [oprema, izbrani]);
+  const izbraniIdji = izbranaOprema.map((o) => o.id_oprema);
+  const vsiPrikazaniIzbrani = prikazana.length > 0 && prikazana.every((o) => izbrani.includes(o.id_oprema));
+  const preklopi = (id: number) =>
+    setIzbrani((iz) => (iz.includes(id) ? iz.filter((x) => x !== id) : [...iz, id]));
+  const izberiPrikazane = () =>
+    setIzbrani((iz) =>
+      vsiPrikazaniIzbrani
+        ? iz.filter((id) => !prikazana.some((o) => o.id_oprema === id))
+        : [...new Set([...iz, ...prikazana.map((o) => o.id_oprema)])],
+    );
 
   return (
     <div className="flex flex-col gap-5">
@@ -142,9 +169,49 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
         </div>
       </section>
 
-      <p className="text-sm text-ink-muted">
-        Prikazano <strong className="text-ink">{prikazana.length}</strong> od {oprema.length}
-      </p>
+      {izbraniIdji.length > 0 && (
+        <section
+          aria-label="Izbrana oprema"
+          className="flex flex-wrap items-center gap-3 rounded-xl border border-brand bg-brand-soft p-3 shadow-sm sm:px-5"
+        >
+          <span className="text-[15px] font-semibold text-ink" title="Število izbrane opreme za skupne akcije">
+            Izbrano: <span className="text-brand">{izbraniIdji.length}</span>
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <SkupinskiGumbi
+              idji={izbraniIdji}
+              onemogoceno={{
+                "tehnicni-list": izbranaOprema.some((o) => o.ima_tehnicni_list)
+                  ? undefined
+                  : "Nobena izbrana oprema nima tehničnega lista",
+                kartoteka: izbranaOprema.some((o) => o.ima_kartoteko)
+                  ? undefined
+                  : "Nobena izbrana oprema nima kartoteke",
+              }}
+            />
+          </div>
+          <Button variant="brand" size="sm" className="ml-auto" onClick={() => setIzbrani([])} title="Počisti izbor vse opreme">
+            <X size={16} />
+            Počisti izbor
+          </Button>
+        </section>
+      )}
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-ink-muted">
+          Prikazano <strong className="text-ink">{prikazana.length}</strong> od {oprema.length}
+        </p>
+        <Button
+          variant="brand"
+          size="sm"
+          onClick={izberiPrikazane}
+          disabled={prikazana.length === 0}
+          title={vsiPrikazaniIzbrani ? "Odznači vso prikazano opremo" : "Izberi vso prikazano opremo"}
+        >
+          {vsiPrikazaniIzbrani ? <Square size={16} /> : <CheckSquare size={16} />}
+          {vsiPrikazaniIzbrani ? "Odznači prikazane" : "Izberi prikazane"}
+        </Button>
+      </div>
 
       {prikazana.length === 0 ? (
         <p className="rounded-xl border border-dashed border-line bg-surface p-10 text-center text-ink-muted">
@@ -154,7 +221,7 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2200px]:grid-cols-5">
           {prikazana.map((o) => (
             <li key={o.id_oprema}>
-              <OpremaKartica o={o} />
+              <OpremaKartica o={o} izbrana={izbrani.includes(o.id_oprema)} onIzberi={() => preklopi(o.id_oprema)} />
             </li>
           ))}
         </ul>
@@ -163,13 +230,14 @@ export function OpremaSeznam({ oprema }: { oprema: OpremaSSliko[] }) {
   );
 }
 
-function OpremaKartica({ o }: { o: OpremaSSliko }) {
+function OpremaKartica({ o, izbrana, onIzberi }: { o: OpremaSSliko; izbrana: boolean; onIzberi: () => void }) {
   const prodano = o.status_prodaje === PRODANO;
   // Celotna kartica je klikljiva (povezava čez celo kartico); gumba PDF sta nad povezavo (z-10)
   return (
     <article
       className={`group relative flex h-full flex-col overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition ` +
         `hover:-translate-y-0.5 hover:border-brand hover:shadow-md focus-within:border-brand ` +
+        (izbrana ? "border-brand ring-2 ring-brand " : "") +
         (prodano ? "opacity-70" : "")}
     >
       <Link
@@ -188,8 +256,20 @@ function OpremaKartica({ o }: { o: OpremaSSliko }) {
             <span className="text-sm">Ni predstavne slike</span>
           </div>
         )}
-        <span className="absolute left-3 top-3 rounded-md bg-dark/85 px-2 py-1 text-sm font-bold text-white">
-          ID {o.id_oprema}
+        <span className="absolute left-3 top-3 flex items-center gap-2">
+          <label
+            className="pointer-events-auto relative z-10 flex h-8 w-8 cursor-pointer items-center justify-center rounded-md bg-dark/85 hover:bg-dark"
+            title={izbrana ? "Odstrani opremo iz izbora" : "Izberi opremo za skupni prenos"}
+          >
+            <input
+              type="checkbox"
+              checked={izbrana}
+              onChange={onIzberi}
+              aria-label={`Izberi opremo ID ${o.id_oprema}`}
+              className="h-5 w-5 cursor-pointer accent-brand"
+            />
+          </label>
+          <span className="rounded-md bg-dark/85 px-2 py-1 text-sm font-bold text-white">ID {o.id_oprema}</span>
         </span>
         <span className="absolute right-3 top-3">
           <StatusBadge status={o.status_prodaje} />
@@ -228,6 +308,10 @@ function OpremaKartica({ o }: { o: OpremaSSliko }) {
           <dd className="truncate font-medium">{o.serijska_stevilka || "–"}</dd>
           <dt className="text-ink-muted">Leto</dt>
           <dd className="font-medium">{o.leto_proizvodnje ?? "–"}</dd>
+          <dt className="text-ink-muted">Cena</dt>
+          <dd className="font-bold text-brand" title="Prodajna cena (zavihek Prodaja)">
+            {o.prodajna_cena != null ? evri(o.prodajna_cena) : "–"}
+          </dd>
           <dt className="self-center text-ink-muted">Stanje</dt>
           <dd>
             <Score value={o.ocena} />
