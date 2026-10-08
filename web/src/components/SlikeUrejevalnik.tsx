@@ -3,7 +3,7 @@
 import { useRef, useState, useSyncExternalStore, type DragEvent, type ReactNode } from "react";
 import { Camera, ImagePlus, Images, Loader2, RefreshCw, Trash2, Upload, X } from "lucide-react";
 import { ZipSlikGumb } from "@/components/PdfGumb";
-import { Section, buttonClass } from "@/components/ui";
+import { FilterPolje, IconButton, Section, buttonClass } from "@/components/ui";
 import { SLIKE_BUCKET } from "@/lib/config";
 import { pripraviSliko } from "@/lib/pripraviSliko";
 import { MESTA_SLIK, imeDatoteke, potSlike, type ObstojecaSlika, type VrstaSlike } from "@/lib/slike";
@@ -45,7 +45,7 @@ function GumbSlike({
       disabled={disabled}
       title={namig}
       aria-label={namig}
-      className={`${buttonClass("ok", "sm")} min-w-0 flex-1`}
+      className={`${buttonClass("success")} min-w-0 flex-1`}
     >
       {ikona}
       <span className="hidden truncate @[15rem]:inline">{besedilo}</span>
@@ -74,8 +74,15 @@ export function SlikeUrejevalnik({
   const mesta = MESTA_SLIK.filter((m) => vrste.includes(m.vrsta));
 
   return (
-    <Section title={naslov} actions={<ZipSlikGumb idOprema={idOprema} disabled={!Object.values(stanje).some((s) => s?.url)} />}>
-      <p className="-mt-2 mb-4 text-sm text-ink-muted">
+    <Section
+      title={naslov}
+      actions={
+        <FilterPolje label="Izvoz">
+          <ZipSlikGumb idOprema={idOprema} disabled={!Object.values(stanje).some((s) => s?.url)} />
+        </FilterPolje>
+      }
+    >
+      <p className="-mt-2 mb-4 text-sm text-ink-500">
         {samoOgled
           ? "Klikni sliko za ogled v polni velikosti."
           : "Slika se shrani takoj. Na računalniku jo lahko povlečeš na polje, na telefonu ali tablici jo posnameš s kamero."}
@@ -189,8 +196,8 @@ function MestoSlike({
   return (
     <div className={`flex flex-col gap-2 ${velika ? "col-span-2 sm:col-span-3" : ""}`}>
       <div className="flex items-baseline justify-between gap-2">
-        <span className="text-sm font-bold text-ink">{naslov}</span>
-        <span className="truncate text-xs text-ink-muted">{namig}</span>
+        <span className="text-sm font-bold text-ink-900">{naslov}</span>
+        <span className="truncate text-xs text-ink-500">{namig}</span>
       </div>
 
       <div
@@ -200,8 +207,8 @@ function MestoSlike({
         }}
         onDragLeave={() => setVlecem(false)}
         onDrop={spusti}
-        className={`relative overflow-hidden rounded-lg border-2 bg-[#f1efec] ${velika ? "aspect-[16/10]" : "aspect-[4/3]"} ${
-          vlecem ? "border-brand bg-brand-soft" : slika ? "border-transparent" : "border-dashed border-line"
+        className={`relative overflow-hidden rounded-lg border-2 bg-ink-100 ${velika ? "aspect-[16/10]" : "aspect-[4/3]"} ${
+          vlecem ? "border-fines-500 bg-fines-50" : slika ? "border-transparent" : "border-dashed border-ink-300"
         }`}
       >
         {slika?.url ? (
@@ -220,7 +227,7 @@ function MestoSlike({
             onClick={() => vnos.current?.click()}
             disabled={samoOgled}
             title={namigUrejanja(`Naloži ${kaj} opreme`)}
-            className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-faint enabled:hover:text-brand disabled:cursor-not-allowed"
+            className="flex h-full w-full flex-col items-center justify-center gap-1.5 text-ink-400 enabled:hover:text-fines-500 disabled:cursor-not-allowed"
           >
             <ImagePlus size={velika ? 36 : 26} />
             <span className="text-xs font-medium">
@@ -230,7 +237,7 @@ function MestoSlike({
         )}
         {delam && (
           <div className="absolute inset-0 flex items-center justify-center bg-white/70">
-            <Loader2 className="animate-spin text-brand" size={28} />
+            <Loader2 className="animate-spin text-sync-500" size={28} />
           </div>
         )}
       </div>
@@ -250,15 +257,13 @@ function MestoSlike({
               alt={naslov}
               className="block max-h-[90dvh] max-w-[calc(100vw-2rem)] rounded-lg object-contain shadow-2xl"
             />
-            <button
-              type="button"
+            <IconButton
+              hint="Zapri ogled slike"
+              icon={X}
+              variant="neutral"
               onClick={() => ogled.current?.close()}
-              title="Zapri"
-              aria-label="Zapri"
-              className={`${buttonClass("brand", "iconSm")} absolute top-2 right-2`}
-            >
-              <X size={18} />
-            </button>
+              className="absolute right-2 top-2"
+            />
           </div>
         </dialog>
       )}
@@ -302,19 +307,16 @@ function MestoSlike({
           />
         )}
         {slika && (
-          <button
-            type="button"
+          <IconButton
+            variant="danger"
+            icon={Trash2}
             disabled={onemogoceno}
             onClick={odstrani}
-            title={namigUrejanja(`Odstrani ${kaj} opreme`)}
-            aria-label={`Odstrani ${kaj} opreme`}
-            className={buttonClass("danger", "iconSm")}
-          >
-            <Trash2 size={16} />
-          </button>
+            hint={namigUrejanja(`Odstrani ${kaj} opreme`)}
+          />
         )}
       </div>
-      {napaka && <p className="text-xs font-medium text-danger">{napaka}</p>}
+      {napaka && <p className="text-xs font-semibold text-nok-600">{napaka}</p>}
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { Trash2 } from "lucide-react";
-import { Button } from "@/components/ui";
+import { Button, useToast } from "@/components/ui";
 import { izbrisiTehnicniList } from "@/app/oprema/actions";
 import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 
@@ -16,22 +16,23 @@ export function IzbrisiTehnicniListGumb({
   samoOgled: boolean;
 }) {
   const [brisem, startBrisanje] = useTransition();
+  const obvesti = useToast();
 
   function izbrisi() {
     if (!confirm("Izbrišem celoten tehnični list (vse podatke in sliko krmiljenja)?")) return;
     startBrisanje(async () => {
       const r = await izbrisiTehnicniList(idOprema);
-      if (r.napaka) alert(r.napaka);
+      if (r.napaka) obvesti("error", r.napaka);
     });
   }
 
   return (
     <Button
-      type="button"
       variant="danger"
+      icon={Trash2}
       onClick={izbrisi}
       disabled={brisem || !obstaja || samoOgled}
-      title={
+      hint={
         samoOgled
           ? NAMIG_SAMO_OGLED
           : obstaja
@@ -39,7 +40,6 @@ export function IzbrisiTehnicniListGumb({
             : "Tehnični list še ni shranjen"
       }
     >
-      <Trash2 size={18} />
       {brisem ? "Brišem ..." : "Izbriši"}
     </Button>
   );

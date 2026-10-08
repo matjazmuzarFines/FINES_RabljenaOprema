@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { History, Plus, Trash2 } from "lucide-react";
 import { PdfGumb } from "@/components/PdfGumb";
-import { Button, Field, Section, TextArea, TextInput } from "@/components/ui";
+import { Button, ErrorText, Field, FilterPolje, IconButton, Section, TextArea, TextInput } from "@/components/ui";
 import { danes, prikazDatuma } from "@/lib/datum";
 import type { ZapisKartoteke } from "@/lib/types";
 import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
@@ -101,23 +101,24 @@ export function Kartoteka({
     <Section
       title="Kartoteka opreme"
       actions={
-        <div className="flex items-center gap-2">
+        <div className="flex items-end gap-2">
           {idOprema !== undefined && (
-            <PdfGumb
-              vrsta="kartoteka"
-              idOprema={idOprema}
-              disabled={zapisi.length === 0}
-              namig={zapisi.length === 0 ? "Kartoteka opreme nima zapisov" : undefined}
-            />
+            <FilterPolje label="Izvoz">
+              <PdfGumb
+                vrsta="kartoteka"
+                idOprema={idOprema}
+                disabled={zapisi.length === 0}
+                namig={zapisi.length === 0 ? "Kartoteka opreme nima zapisov" : undefined}
+              />
+            </FilterPolje>
           )}
           <Button
-            type="button"
             variant="danger"
+            icon={Trash2}
             onClick={izbrisiVse}
             disabled={shranjujem || zapisi.length === 0 || samoOgled}
-            title={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši celotno kartoteko opreme (vse zapise)"}
+            hint={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši celotno kartoteko opreme (vse zapise)"}
           >
-            <Trash2 size={18} />
             Izbriši
           </Button>
         </div>
@@ -144,16 +145,20 @@ export function Kartoteka({
         </Field>
       </div>
       <div className="mt-3 flex flex-wrap items-center justify-end gap-3">
-        {napaka && <p className="mr-auto text-sm font-medium text-danger">{napaka}</p>}
+        {napaka && (
+          <div className="mr-auto">
+            <ErrorText>{napaka}</ErrorText>
+          </div>
+        )}
         {!napaka && lokalno && zapisi.length > 0 && (
-          <p className="mr-auto text-sm text-ink-muted">Zapisi se shranijo skupaj z opremo.</p>
+          <p className="mr-auto text-sm text-ink-500">Zapisi se shranijo skupaj z opremo.</p>
         )}
         <Button
-          type="button"
-          variant="ok"
+          variant="success"
+          icon={Plus}
           onClick={dodaj}
           disabled={shranjujem}
-          title={
+          hint={
             samoOgled
               ? NAMIG_SAMO_OGLED
               : lokalno
@@ -161,20 +166,19 @@ export function Kartoteka({
                 : "Dodaj in shrani zapis v kartoteko opreme"
           }
         >
-          <Plus size={18} />
           {shranjujem ? "Shranjujem ..." : "Dodaj zapis"}
         </Button>
       </div>
       </fieldset>
 
-      <div className="mt-5 border-t border-line pt-4">
+      <div className="mt-5 border-t border-ink-200 pt-4">
         {skupaj > 0 && (
-          <p className="mb-3 text-sm text-ink-muted">
-            Skupni stroški: <strong className="text-ink">{evri(skupaj)}</strong>
+          <p className="mb-3 text-sm text-ink-500">
+            Skupni stroški: <strong className="tabular-nums text-ink-900">{evri(skupaj)}</strong>
           </p>
         )}
         {prikaz.length === 0 ? (
-          <p className="flex items-center gap-2 py-6 text-sm text-ink-muted">
+          <p className="flex items-center justify-center gap-2 py-6 text-sm text-ink-500">
             <History size={18} /> V kartoteki še ni zapisov.
           </p>
         ) : (
@@ -183,34 +187,30 @@ export function Kartoteka({
               <li key={z.id ?? `lokalno-${i}`} className="relative flex gap-4 pb-5 last:pb-1">
                 {/* časovnica: pika + navpična črta */}
                 <div className="relative flex w-3 shrink-0 justify-center">
-                  <span className="z-10 mt-1.5 h-3 w-3 rounded-full border-2 border-white bg-brand ring-2 ring-brand/30" />
-                  {i < prikaz.length - 1 && <span className="absolute bottom-[-0.25rem] top-4 w-0.5 bg-line" />}
+                  <span className="z-10 mt-1.5 h-3 w-3 rounded-full border-2 border-white bg-fines-500 ring-2 ring-fines-200" />
+                  {i < prikaz.length - 1 && <span className="absolute bottom-[-0.25rem] top-4 w-0.5 bg-ink-200" />}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-bold text-ink">
+                  <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-bold text-ink-900">
                     {prikazDatuma(z.datum_vnosa)}
                     {z.strosek != null && (
-                      <span className="rounded bg-brand-soft px-1.5 py-0.5 text-xs font-semibold text-brand-pressed">
+                      <span className="rounded bg-fines-50 px-1.5 py-0.5 text-xs font-semibold tabular-nums text-fines-700">
                         Strošek: {evri(z.strosek)}
                       </span>
                     )}
                     {!z.id && (
-                      <span className="rounded bg-warn-soft px-1.5 py-0.5 text-xs font-medium text-ink">ni še shranjeno</span>
+                      <span className="rounded bg-warn-50 px-1.5 py-0.5 text-xs font-semibold text-warn-700">ni še shranjeno</span>
                     )}
                   </p>
-                  <p className="mt-0.5 whitespace-pre-wrap break-words text-[15px] text-ink">{z.besedilo_vnosa}</p>
+                  <p className="mt-0.5 whitespace-pre-wrap break-words text-sm text-ink-900">{z.besedilo_vnosa}</p>
                 </div>
-                <Button
-                  type="button"
+                <IconButton
                   variant="danger"
-                  size="iconXs"
+                  icon={Trash2}
                   onClick={() => izbrisiZapis(z)}
                   disabled={shranjujem || samoOgled}
-                  title={samoOgled ? NAMIG_SAMO_OGLED : `Izbriši zapis kartoteke z dne ${prikazDatuma(z.datum_vnosa)}`}
-                  aria-label={`Izbriši zapis z dne ${prikazDatuma(z.datum_vnosa)}`}
-                >
-                  <Trash2 size={14} />
-                </Button>
+                  hint={samoOgled ? NAMIG_SAMO_OGLED : `Izbriši zapis z dne ${prikazDatuma(z.datum_vnosa)}`}
+                />
               </li>
             ))}
           </ol>

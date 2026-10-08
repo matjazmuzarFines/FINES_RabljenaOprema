@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
 import { PdfGumb } from "@/components/PdfGumb";
+import { FilterPolje } from "@/components/ui";
 import { SlikeUrejevalnik } from "@/components/SlikeUrejevalnik";
 import { slikeOpreme } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
@@ -51,15 +52,17 @@ export default async function TehnicniListPage({ params }: PageProps<"/oprema/[i
       title={`Tehnični list – ${oprema.oprema_naziv}`}
       subtitle={[`ID ${oprema.id_oprema}`, oprema.skupina_opreme, oprema.serijska_stevilka].filter(Boolean).join(" · ")}
       back={`/oprema/${oprema.id_oprema}`}
-      backTitle="Nazaj na urejanje rabljene opreme"
+      backHint="Nazaj na urejanje rabljene opreme"
       actions={
-        <div className="flex items-center gap-2">
-          <PdfGumb
-            vrsta="tehnicni-list"
-            idOprema={oprema.id_oprema}
-            disabled={!obstojeci}
-            namig={obstojeci ? undefined : "Tehnični list še ni izpolnjen (najprej ga shrani)"}
-          />
+        <div className="flex items-end gap-2">
+          <FilterPolje label="Izvoz">
+            <PdfGumb
+              vrsta="tehnicni-list"
+              idOprema={oprema.id_oprema}
+              disabled={!obstojeci}
+              namig={obstojeci ? undefined : "Tehnični list še ni shranjen"}
+            />
+          </FilterPolje>
           <IzbrisiTehnicniListGumb
             idOprema={oprema.id_oprema}
             obstaja={!!obstojeci || !!slike.Krmiljenje}
@@ -68,7 +71,7 @@ export default async function TehnicniListPage({ params }: PageProps<"/oprema/[i
         </div>
       }
     >
-      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(360px,460px)]">
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(360px,460px)]">
         {/* key: po izbrisu se obrazec in slika izrišeta na novo (prazna) */}
         <TehnicniListObrazec
           key={obstojeci ? "obstojeci" : "nov"}

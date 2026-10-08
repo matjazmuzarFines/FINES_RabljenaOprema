@@ -3,7 +3,8 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { Button, Field, TextInput } from "@/components/ui";
+import { LogIn } from "lucide-react";
+import { Button, ErrorText, Field, TextInput } from "@/components/ui";
 import { DOVOLJENA_DOMENA } from "@/lib/config";
 import { createClient } from "@/lib/supabase/client";
 
@@ -35,11 +36,11 @@ export default function PrijavaPage() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center border-t-[3px] border-brand px-4 py-10">
-      <div className="w-full max-w-md rounded-2xl border border-line bg-surface p-6 shadow-sm sm:p-8">
+    <div className="flex min-h-dvh items-center justify-center border-t-4 border-fines-500 px-4 py-10">
+      <div className="fp-card w-full max-w-md p-6 sm:p-8">
         <Image src="/fines-logo.png" alt="FINES d.o.o. logotip" width={136} height={36} priority />
-        <h1 className="mt-6 text-2xl font-bold">Rabljena oprema</h1>
-        <p className="mt-1 text-[15px] text-ink-muted">Prijava v aplikacijo</p>
+        <h1 className="mt-6 text-xl font-bold text-ink-900">Rabljena oprema</h1>
+        <p className="text-sm text-ink-500">Prijava v aplikacijo</p>
 
         <form onSubmit={prijava} className="mt-6 flex flex-col gap-4">
           <Field label="Uporabniško ime">
@@ -61,15 +62,15 @@ export default function PrijavaPage() {
               onChange={(e) => setGeslo(e.target.value)}
             />
           </Field>
-          <Button type="submit" disabled={nalaganje} title="Prijava v aplikacijo Rabljena oprema">
+          <Button type="submit" size="lg" icon={LogIn} disabled={nalaganje} hint="Prijava v aplikacijo Rabljena oprema">
             {nalaganje ? "Prijavljam ..." : "Prijava"}
           </Button>
         </form>
 
         {napaka && (
-          <p role="alert" className="mt-4 rounded-lg border border-warn bg-warn-soft px-3 py-2 text-sm text-ink">
-            {napaka}
-          </p>
+          <div className="mt-4">
+            <ErrorText>{napaka}</ErrorText>
+          </div>
         )}
       </div>
     </div>

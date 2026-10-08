@@ -1,82 +1,43 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { ChevronLeft, Eye, LogOut } from "lucide-react";
-import { odjava } from "@/app/actions";
-import { InfoGumb } from "@/components/InfoGumb";
-import { buttonClass } from "@/components/ui";
+import { Glava } from "@/components/Glava";
 import { createClient } from "@/lib/supabase/server";
-import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
+import { TRENUTNA_VERZIJA } from "@/lib/verzije";
+import { jeSamoOgled } from "@/lib/vloga";
 
-// Okvir vsake strani: Fines logo, gumb i (spremembe), gumb Nazaj (razen domače strani), gumb Izhod.
+// Okvir vsake strani: glava (logo, Nazaj, i, Izhod), naslov in podnaslov levo, akcije desno zgoraj.
 export async function AppShell({
   title,
   subtitle,
   back,
-  backTitle = "Nazaj na seznam rabljene opreme",
+  backHint = "Nazaj na seznam rabljene opreme",
   actions,
   children,
 }: {
   title: string;
   subtitle?: string;
   back?: string; // URL za gumb Nazaj; brez njega (domača stran) gumba ni
-  backTitle?: string; // namig za gumb Nazaj
+  backHint?: string; // hover tekst za gumb Nazaj
   actions?: ReactNode;
   children: ReactNode;
 }) {
   const samoOgled = await jeSamoOgled(await createClient());
   return (
     <div className="flex min-h-dvh flex-col">
-      <header className="sticky top-0 z-20 border-t-[3px] border-brand bg-surface/95 shadow-sm backdrop-blur">
-        <div className="mx-auto flex h-16 w-full max-w-[1800px] items-center gap-3 px-4 sm:px-6">
-          <Link href="/" aria-label="FINES – domača stran" title="Na domačo stran (seznam opreme)" className="shrink-0">
-            <Image src="/fines-logo.png" alt="FINES d.o.o. logotip" width={136} height={36} priority />
-          </Link>
-          {samoOgled && (
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#ececec] px-3 py-1 text-xs font-semibold text-ink-muted"
-              title={NAMIG_SAMO_OGLED}
-            >
-              <Eye size={14} />
-              Samo ogled
-            </span>
-          )}
-          <div className="ml-auto flex items-center gap-2">
-            <InfoGumb />
-            {back && (
-              <Link href={back} className={buttonClass("brand")} title={backTitle} aria-label={backTitle}>
-                <ChevronLeft size={18} />
-                <span className="hidden sm:inline">Nazaj</span>
-              </Link>
-            )}
-            <form action={odjava}>
-              <button
-                type="submit"
-                className={buttonClass("brand")}
-                title="Odjava in izhod iz aplikacije"
-                aria-label="Odjava in izhod iz aplikacije"
-              >
-                <LogOut size={18} />
-                <span className="hidden sm:inline">Izhod</span>
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
+      <Glava back={back} backHint={backHint} samoOgled={samoOgled} />
 
-      <main className="mx-auto w-full max-w-[1800px] flex-1 px-4 py-6 sm:px-6 lg:py-8">
-        <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <main className="mx-auto w-full max-w-[1800px] flex-1 px-3 py-4 sm:px-6 sm:py-6">
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="text-2xl font-bold text-ink sm:text-3xl">{title}</h1>
-            {subtitle && <p className="mt-1 text-[15px] text-ink-muted">{subtitle}</p>}
+            <h1 className="break-words text-xl font-bold text-ink-900">{title}</h1>
+            {subtitle && <p className="text-sm text-ink-500">{subtitle}</p>}
           </div>
-          {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
+          {actions && <div className="flex flex-wrap items-end gap-2">{actions}</div>}
         </div>
         {children}
       </main>
 
-      <footer className="border-t border-brand/15 bg-surface py-4 text-center text-xs text-ink-faint">
-        FINES d.o.o. | Rabljena oprema
+      <footer className="border-t border-ink-200 bg-white px-4 py-2 text-center text-xs text-ink-500">
+        FINES d.o.o. | Rabljena oprema | Verzija {TRENUTNA_VERZIJA}
       </footer>
     </div>
   );

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { SLIKE_BUCKET } from "@/lib/config";
-import { STATUSI } from "@/lib/sifranti";
+import { NAJVISJA_OCENA, STATUSI } from "@/lib/sifranti";
 import { potSlike } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
 import { obvestiTeamsNovaOprema } from "@/lib/teams";
@@ -54,7 +54,7 @@ export async function shraniOpremo(_prej: ShraniStanje, fd: FormData): Promise<S
     lastnistvo: besedilo(fd, "lastnistvo"),
     skladisce: besedilo(fd, "skladisce"),
     komentar: besedilo(fd, "komentar"),
-    ocena: stevilo(fd, "ocena", napake, "Ocena", 1, 6),
+    ocena: stevilo(fd, "ocena", napake, "Ocena", 1, NAJVISJA_OCENA),
   };
   if (!oprema.oprema_naziv) napake.oprema_naziv = "Naziv opreme je obvezen.";
 
@@ -68,6 +68,7 @@ export async function shraniOpremo(_prej: ShraniStanje, fd: FormData): Promise<S
     datum_prodaje: besedilo(fd, "datum_prodaje"),
     komentar_ob_prodaji: besedilo(fd, "komentar_ob_prodaji"),
   };
+  if (fd.get("garancijski_rok_meseci") === "") napake.garancijski_rok_meseci = "Izberi garancijski rok (6, 12 ali 24 mesecev).";
   if (prodaja.status_prodaje && !(STATUSI as readonly string[]).includes(prodaja.status_prodaje)) {
     napake.status_prodaje = "Neveljaven status prodaje.";
   }

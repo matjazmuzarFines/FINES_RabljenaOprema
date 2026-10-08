@@ -2,6 +2,30 @@
 // Manjši popravki: 1.01 -> 1.02; nova funkcija ali podstran: 1.xx -> 2.01.
 export const VERZIJE: { verzija: string; datum: string; spremembe: string[] }[] = [
   {
+    verzija: "3.01",
+    datum: "2026-10-08",
+    spremembe: [
+      "Ocena stanja je od 1 do 5 (ocena 6 je ukinjena, obstoječe ocene 6 so postale 5). Ob oceni je opis: 1 uničeno, neuporabno, neurejeno · 2 zelo rabljeno · 3 vidno rabljeno · 4 očiščeno, skoraj novo · 5 kot novo.",
+      "Prodaja: garancija z izbiro DA/NE in lestvico 6, 12 ali 24 mesecev (pri NE je lestvica zaklenjena).",
+      "Pregled opreme: moder znak garancije v levem spodnjem kotu slike (samo oprema z garancijo).",
+      "PDF osnovnih podatkov: ocena z opisom in garancija.",
+      "Barve gumbov: prenos PDF/ZIP je oranžen (funkcija v aplikaciji), e-mail moder (Outlook), beli gumbi samo spremenijo prikaz (Nazaj, Ponastavi filtre, Tehnični list ...); Izhod oranžen.",
+    ],
+  },
+  {
+    verzija: "2.02",
+    datum: "2026-10-08",
+    spremembe: [
+      "Poenotenje s standardnimi komponentami Fines (app_instructions.md): barve, gumbi 40 px, polja, kartice, okna in obvestila enaki kot v ostalih Fines aplikacijah.",
+      "Glava: logo, Nazaj, »i« in Izhod v enotnem slogu, spodaj oranžna črta; verzija v nogi.",
+      "Pregled opreme: kartice statusov prodaje s številom opreme (klik prikaže / skrije status) namesto spustnega seznama in stikala »Prikaži prodano«.",
+      "Filtri v eni vrstici z naslovi nad polji; iskalna polja z lupo.",
+      "Gumbi za izvoz (PDF, e-mail, ZIP) so beli z obrobo, pod naslovom »Izvoz«; Osveži podatke je moder.",
+      "Obrazca opreme in tehničnega lista: spodnja vrstica s številom neshranjenih sprememb, Prekliči in Shrani; opozorilo pred odhodom s strani.",
+      "Napake pri prenosu se prikažejo kot obvestilo na vrhu strani.",
+    ],
+  },
+  {
     verzija: "2.01",
     datum: "2026-10-06",
     spremembe: [

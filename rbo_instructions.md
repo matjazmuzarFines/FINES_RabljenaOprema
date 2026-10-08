@@ -1,31 +1,20 @@
-# Navodila in smernice za izdelavo aplikacije
+# Rabljena oprema (RBO) - posebnosti projekta
 
-## Generalne smernice
-- Vse komponente morajo biti standardne in enotne - (enake oblike, enake barve, enake velikost, enako osenčenje za vsako posamezno komponento - dropdown, score, button, tabela)
-- Vsaka stran mora imeti Fines logo, gumb nazaj (razen homepage), gumb izhod oz. close app
-- GUI mora biti izdelan in variabilno nastavljen tako, da se komponente lepo zlagajo in prikažejo tako za katere koli velikosti monitor, televizijo in prav tako za tablico in telefon.
+Skupna pravila so v `../FINES_Standardi/app_instructions.md` (uvoženo v `CLAUDE.md`). Tukaj so samo pravila tega projekta.
 
+## Baza
+- Tabele: `rbo_...`, povezovalne `ln_rbo_...`. Migracije so v `supabase/migrations/` in jih poženeš ročno v Supabase SQL Editorju.
 
-## Barve
-Uporabljaj izključno barve podjetja Fines d.o.o.
-- Primary: Temno oranžna
-- Secondary: Temno siva ali odtenki sive, bela, črna
+## Ocena stanja
+- Ocena je **od 1 do 5**, desno od lestvice / črtic je vedno opis ocene:
+  1 = uničeno, neuporabno, neurejeno; 2 = zelo rabljeno; 3 = vidno rabljeno; 4 = očiščeno, skoraj novo, malo rabljeno; 5 = kot novo.
 
-Razni funkcijski gumbi in opozorila so seveda druge barve.
-- Add gumb / potrdi / shrani je živo zelen
-- Izbriši, odstrani je rdeč
-- Razna opozorila rumena
-- Razni synki in ostali funkcijski gumbi ki kličejo zunanje funkcije izven vercel appa so modri
+## Garancija
+- Pod Prodajo: DA/NE in lestvica 6 / 12 / 24 mesecev (pri NE zaklenjena, shrani se 0).
+- Na pregledu opreme je moder znak garancije v levem spodnjem kotu slike; brez garancije se ne prikaže.
 
-## Gumbi, Sliderji, Prikazovalniki
+## Statusi prodaje (barve značk in kartic)
+- Ni za prodajo rdeča, Ni urejeno za prodajo rumena, Neprodano oranžna, Prodano siva, Posojeno modra.
 
-- Vsi gumbi, sliderji, ikonce, prikazovalniki morajo nujno imeti hover text, ki pove kaj točno bo ta gumb naredil. Maximum 6 do 8 besed. Recimo gumb "Dodaj" mora imeti hover "Dodaj nov kontrolni postopek" če gumb doda nov kontrolni postopek itd.
-
-## Baza SQL
-- Podatkov se ne sme brisati. Posložujemo se visible = true/false. Če bo potrebno brisanje bo to izrecno povedano
-- Slike se v večini morajo brisati, zaradi prostora in synca
-- Vsaka tabela mora imeti svoje IDje zaradi povezav. V primeru večih tabel na isti komponenti je potrebno narediti tudi povezovalno tabelo
-- tabele se morajo imenovati: {ime projekta v 2 ali 3 črkah}_......, povezovalne tabele so: ln_{ime projekta v 2 ali 3 črkah}_{tabela 1}_{tabela 2}... Primer: Projekt Kontrolni postopki: kp_..., ln_kp_... Projekt Rabljena oprema: rbo_..., ln_rbo_....
-
-## Spremembe
-- App mora imeti v desnem zgornjem kotu ikonco "i" kot informacije. na klik se odpre popup kjer bova pisala vse spremembe in verzije. Vsakič ko narediš spremembe dodaj številko in summariziraj kaj je bilo spremenjeno in narejeno. Številke delaj 1.XX. Recimo 1.01, potem spremembe 1.02, ... in če narediva večje spremembe ali dodava kompletno novo funkcijo ali podstran je potrebno dvigniti številko na 2.01. in potem male spremembe naprej. Številko dvignejo, večje spremembe. Majhni popravki oblik, tekstov ne sodijo v večje spremembe.
+## Verzije
+- Zgodovina sprememb je v `web/src/lib/verzije.ts` (gumb "i").

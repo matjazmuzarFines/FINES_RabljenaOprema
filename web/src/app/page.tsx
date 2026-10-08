@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Plus } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
-import { Button, buttonClass } from "@/components/ui";
+import { Button, ErrorText, buttonClass } from "@/components/ui";
 import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
 import { OpremaSeznam } from "@/app/OpremaSeznam";
 import { podpisaniUrlji } from "@/lib/slike";
@@ -32,25 +32,18 @@ export default async function HomePage() {
       subtitle="Upravljanje in pregled rabljene Fines opreme"
       actions={
         samoOgled ? (
-          <Button variant="ok" disabled title={NAMIG_SAMO_OGLED}>
-            <Plus size={18} />
+          <Button variant="success" icon={Plus} disabled hint={NAMIG_SAMO_OGLED}>
             Dodaj rabljeno opremo
           </Button>
         ) : (
-          <Link href="/dodaj" className={buttonClass("ok")} title="Dodaj novo rabljeno opremo na seznam">
-            <Plus size={18} />
+          <Link href="/dodaj" className={buttonClass("success")} title="Dodaj novo rabljeno opremo na seznam">
+            <Plus className="h-4 w-4 shrink-0" aria-hidden />
             Dodaj rabljeno opremo
           </Link>
         )
       }
     >
-      {error ? (
-        <p role="alert" className="rounded-lg border border-danger/40 bg-danger/5 p-4 text-[15px]">
-          Podatkov ni bilo mogoče naložiti: {error.message}
-        </p>
-      ) : (
-        <OpremaSeznam oprema={oprema} />
-      )}
+      {error ? <ErrorText>Podatkov ni bilo mogoče naložiti: {error.message}</ErrorText> : <OpremaSeznam oprema={oprema} />}
     </AppShell>
   );
 }

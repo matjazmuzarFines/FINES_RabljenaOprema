@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CircleCheck, ClipboardList } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { SlikeUrejevalnik } from "@/components/SlikeUrejevalnik";
-import { StatusBadge, buttonClass } from "@/components/ui";
+import { NavPovezava, StatusBadge, SuccessText, WarningText, buttonClass } from "@/components/ui";
 import { OpremaObrazec } from "@/app/oprema/OpremaObrazec";
 import { naloziSifrante } from "@/lib/sifranti";
 import { slikeOpreme } from "@/lib/slike";
@@ -42,38 +41,35 @@ export default async function UrediPage({ params, searchParams }: PageProps<"/op
       subtitle={[`ID ${oprema.id_oprema}`, oprema.skupina_opreme, oprema.serijska_stevilka].filter(Boolean).join(" · ")}
       back="/"
       actions={
-        <div className="flex flex-wrap items-center gap-3">
-          <Link
+        <div className="flex flex-wrap items-center gap-2">
+          <StatusBadge status={oprema.status_prodaje} />
+          <NavPovezava
             href={`/oprema/${oprema.id_oprema}/tehnicni_list`}
-            className={buttonClass("brand")}
+            className={buttonClass("neutral")}
             title="Odpri tehnični list opreme"
           >
-            <ClipboardList size={18} />
+            <ClipboardList className="h-4 w-4 shrink-0" aria-hidden />
             Tehnični list
-          </Link>
-          <StatusBadge status={oprema.status_prodaje} />
+          </NavPovezava>
           <IzbrisiGumb idOprema={oprema.id_oprema} naziv={oprema.oprema_naziv} samoOgled={samoOgled} />
         </div>
       }
     >
-      {novo && (
-        <p className="mb-5 flex items-center gap-2 rounded-xl border border-ok/40 bg-ok/10 px-4 py-3 text-[15px] font-medium">
-          <CircleCheck className="text-ok" size={20} />
-          Oprema je dodana (ID {oprema.id_oprema}). Zdaj lahko dodaš slike.
-        </p>
+      {(novo || kartoteka === "napaka" || teams) && (
+        <div className="mb-4 flex flex-col gap-2">
+          {novo && <SuccessText>Oprema je dodana (ID {oprema.id_oprema}). Zdaj lahko dodaš slike.</SuccessText>}
+          {kartoteka === "napaka" && (
+            <WarningText>Zapisov kartoteke ni bilo mogoče shraniti. Dodaj jih ponovno v razdelku Kartoteka opreme.</WarningText>
+          )}
+          {teams && (
+            <WarningText>
+              Oprema je shranjena, vendar obvestilo v Teams ni bilo poslano. Ekipo obvesti ročno.
+              <span className="mt-1 block font-normal">Podrobnosti: {String(teams)}</span>
+            </WarningText>
+          )}
+        </div>
       )}
-      {kartoteka === "napaka" && (
-        <p className="mb-5 rounded-xl border border-warn bg-warn-soft px-4 py-3 text-[15px] font-medium">
-          Zapisov kartoteke ni bilo mogoče shraniti. Dodaj jih ponovno v razdelku Kartoteka opreme.
-        </p>
-      )}
-      {teams && (
-        <p className="mb-5 rounded-xl border border-warn bg-warn-soft px-4 py-3 text-[15px] font-medium">
-          Oprema je shranjena, vendar obvestilo v Teams ni bilo poslano. Ekipo obvesti ročno.
-          <span className="mt-1 block text-sm font-normal text-ink-muted">Podrobnosti: {String(teams)}</span>
-        </p>
-      )}
-      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(420px,560px)]">
+      <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(420px,560px)]">
         <OpremaObrazec
           key={oprema.id_oprema}
           oprema={oprema}

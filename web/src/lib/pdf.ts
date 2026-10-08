@@ -4,6 +4,7 @@ import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, rgb, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
 import { danes, prikazDatuma } from "@/lib/datum";
 import { pripraviSliko } from "@/lib/pripraviSliko";
+import { NAJVISJA_OCENA, opisOcene } from "@/lib/sifranti";
 import { MESTA_SLIK, slikeOpreme, type ObstojecaSlika, type VrstaSlike } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/client";
 import { TL_SKLOPI, type OpremaVrstica, type TehnicniList, type ZapisKartoteke } from "@/lib/types";
@@ -272,8 +273,9 @@ const osnovniPodatki = (o: OpremaVrstica): [string, string][] => [
   ["Količina", `${o.kolicina} ${o.em ?? ""}`.trim()],
   ["Lastništvo", o.lastnistvo ?? ""],
   ["Skladišče", o.skladisce ?? ""],
-  ["Ocena stanja", o.ocena ? `${o.ocena} / 6` : ""],
+  ["Ocena stanja", o.ocena ? `${o.ocena} / ${NAJVISJA_OCENA} – ${opisOcene(o.ocena)}` : ""],
   ["Status prodaje", o.status_prodaje ?? ""],
+  ["Garancija", o.garancijski_rok_meseci ? `${o.garancijski_rok_meseci} mesecev` : "Brez garancije"],
 ];
 
 // ---------------------------------------------------------------------------
@@ -387,7 +389,7 @@ export async function ustvariOsnovnePodatkePdf({ oprema, slike }: PodatkiOpreme)
       ["Ident (koda)", oprema.koda ?? ""],
       ["Serijska številka", oprema.serijska_stevilka ?? ""],
       ["Leto proizvodnje", oprema.leto_proizvodnje?.toString() ?? ""],
-      ["Ocena stanja", oprema.ocena ? `${oprema.ocena} / 6` : ""],
+      ["Ocena stanja", oprema.ocena ? `${oprema.ocena} / ${NAJVISJA_OCENA} – ${opisOcene(oprema.ocena)}` : ""],
     ],
     SIRINA,
     2,

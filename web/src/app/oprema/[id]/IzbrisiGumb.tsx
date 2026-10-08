@@ -23,15 +23,14 @@ export function IzbrisiGumb({ idOprema, naziv, samoOgled }: { idOprema: number; 
     <div className="flex flex-col items-end gap-1">
       <Button
         variant="danger"
+        icon={Trash2}
         onClick={izbrisi}
         disabled={brisem || samoOgled}
-        title={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši rabljeno opremo s seznama"}
+        hint={samoOgled ? NAMIG_SAMO_OGLED : "Izbriši rabljeno opremo s seznama"}
       >
-
-        <Trash2 size={18} />
         {brisem ? "Brišem ..." : "Izbriši"}
       </Button>
-      {napaka && <p className="text-sm font-medium text-danger">{napaka}</p>}
+      {napaka && <p className="text-xs font-semibold text-nok-600">{napaka}</p>}
     </div>
   );
 }

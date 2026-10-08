@@ -10,6 +10,20 @@ export const STATUSI = [
 
 export const ENOTE_MERE = ["kos", "kpl"];
 
+// Ocena stanja 1–5 in njen opis (prikaz ob oceni, filter, PDF)
+export const OCENE: Record<number, string> = {
+  1: "Uničeno, neuporabno, neurejeno",
+  2: "Zelo rabljeno",
+  3: "Vidno rabljeno",
+  4: "Očiščeno, skoraj novo, malo rabljeno",
+  5: "Kot novo",
+};
+export const NAJVISJA_OCENA = 5;
+export const opisOcene = (ocena: number | null) => (ocena ? (OCENE[ocena] ?? "") : "");
+
+// Garancijski rok v mesecih (0 = brez garancije)
+export const GARANCIJE = [6, 12, 24] as const;
+
 export type Sifranti = {
   skupina: string[];
   lastnistvo: string[];
