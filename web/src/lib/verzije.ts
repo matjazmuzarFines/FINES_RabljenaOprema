@@ -2,6 +2,15 @@
 // Manjši popravki: 1.01 -> 1.02; nova funkcija ali podstran: 1.xx -> 2.01.
 export const VERZIJE: { verzija: string; datum: string; spremembe: string[] }[] = [
   {
+    verzija: "4.01",
+    datum: "2026-10-10",
+    spremembe: [
+      "Poskusno AI iskanje na domači strani: »Iščeš rabljeno opremo?« – opiši s svojimi besedami, kaj iščeš, in prikaže se najbolj ustrezna oprema (prodana oprema se ne prikaže).",
+      "Odprtokodni model (multilingual-e5-small) teče v brskalniku; ob prvi uporabi se prenese ~120 MB, podatki ne gredo k zunanjim AI storitvam.",
+      "Oznake opreme v vprašanju (npr. FB, FD64) omejijo zadetke na opremo s to oznako; »Koliko …« prikaže število postavk in količino; sinonimi za interne izraze.",
+    ],
+  },
+  {
     verzija: "3.01",
     datum: "2026-10-08",
     spremembe: [

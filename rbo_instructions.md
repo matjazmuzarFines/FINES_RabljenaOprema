@@ -16,5 +16,8 @@ Skupna pravila so v `../FINES_Standardi/app_instructions.md` (uvoženo v `CLAUDE
 ## Statusi prodaje (barve značk in kartic)
 - Ni za prodajo rdeča, Ni urejeno za prodajo rumena, Neprodano oranžna, Prodano siva, Posojeno modra.
 
+## AI iskanje (poskusno)
+- Element na domači strani, odprtokodni model v brskalniku (brezplačno, brez API ključa). Vse je v `web/src/components/ai-iskanje/`, navodila za odstranitev so v tamkajšnjem `README.md`.
+
 ## Verzije
 - Zgodovina sprememb je v `web/src/lib/verzije.ts` (gumb "i").

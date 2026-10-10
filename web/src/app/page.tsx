@@ -4,6 +4,7 @@ import { AppShell } from "@/components/AppShell";
 import { Button, ErrorText, buttonClass } from "@/components/ui";
 import { NAMIG_SAMO_OGLED, jeSamoOgled } from "@/lib/vloga";
 import { OpremaSeznam } from "@/app/OpremaSeznam";
+import { AiIskanje } from "@/components/ai-iskanje/AiIskanje";
 import { podpisaniUrlji } from "@/lib/slike";
 import { createClient } from "@/lib/supabase/server";
 import type { OpremaSSliko, OpremaVrstica } from "@/lib/types";
@@ -43,7 +44,14 @@ export default async function HomePage() {
         )
       }
     >
-      {error ? <ErrorText>Podatkov ni bilo mogoče naložiti: {error.message}</ErrorText> : <OpremaSeznam oprema={oprema} />}
+      {error ? (
+        <ErrorText>Podatkov ni bilo mogoče naložiti: {error.message}</ErrorText>
+      ) : (
+        <div className="flex flex-col gap-4">
+          <AiIskanje oprema={oprema} />
+          <OpremaSeznam oprema={oprema} />
+        </div>
+      )}
     </AppShell>
   );
 }
