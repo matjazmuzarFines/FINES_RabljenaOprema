@@ -21,6 +21,7 @@ import { NAMIG_SAMO_OGLED } from "@/lib/vloga";
 import type { OpremaVrstica, ZapisKartoteke } from "@/lib/types";
 import { shraniOpremo, type ShraniStanje } from "./actions";
 import { Kartoteka } from "./Kartoteka";
+import { SkenNalepke } from "@/components/sken-nalepke/SkenNalepke";
 
 const GARANCIJE_MOZNOSTI = GARANCIJE.map((m) => ({ value: m as number, label: `${m} mes.`, hint: `Garancija ${m} mesecev` }));
 
@@ -91,7 +92,9 @@ export function OpremaObrazec({
       {/* fieldset disabled onemogoči vsa polja in gumbe v razdelkih (display: contents ohrani postavitev) */}
       <fieldset disabled={samoOgled} className="contents">
       <Section title="Osnovni podatki">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
+        {/* nova oprema: desno sken serijske nalepke (na telefonu nad polji) */}
+        <div className={novo ? "flex flex-col-reverse gap-4 lg:flex-row" : ""}>
+        <div className="grid flex-1 content-start grid-cols-1 gap-4 sm:grid-cols-2 2xl:grid-cols-3">
           <Field label="Naziv opreme" required error={napaka("oprema_naziv")} className="sm:col-span-2 2xl:col-span-3">
             <TextInput name="oprema_naziv" defaultValue={niz(oprema?.oprema_naziv)} placeholder="npr. FBM 40" required />
           </Field>
@@ -128,6 +131,8 @@ export function OpremaObrazec({
               <Select name="em" options={ENOTE_MERE} placeholder="—" defaultValue={oprema ? niz(oprema.em) : "kos"} />
             </Field>
           </div>
+        </div>
+        {novo && <SkenNalepke skupine={sifranti.skupina} />}
         </div>
       </Section>
 

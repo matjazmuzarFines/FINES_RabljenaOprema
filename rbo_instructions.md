@@ -18,6 +18,7 @@ Skupna pravila so v `../FINES_Standardi/app_instructions.md` (uvoženo v `CLAUDE
 
 ## AI iskanje (poskusno)
 - Element na domači strani, odprtokodni model v brskalniku (brezplačno, brez API ključa). Vse je v `web/src/components/ai-iskanje/`, navodila za odstranitev so v tamkajšnjem `README.md`.
+- Sken serijske nalepke pri dodajanju opreme (OCR v brskalniku): `web/src/components/sken-nalepke/`, odstranitev v tamkajšnjem `README.md`.
 
 ## Verzije
 - Zgodovina sprememb je v `web/src/lib/verzije.ts` (gumb "i").

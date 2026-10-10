@@ -2,6 +2,16 @@
 // Manjši popravki: 1.01 -> 1.02; nova funkcija ali podstran: 1.xx -> 2.01.
 export const VERZIJE: { verzija: string; datum: string; spremembe: string[] }[] = [
   {
+    verzija: "5.01",
+    datum: "2026-10-10",
+    spremembe: [
+      "Dodaj opremo: okno »Skeniraj nalepko« desno v Osnovnih podatkih. Fotografiraj serijsko nalepko in samodejno se izpolnijo naziv, ident, serijska številka, leto proizvodnje in skupina opreme (samo prazna polja).",
+      "Branje nalepke (odprtokodni PaddleOCR) teče v brskalniku; ob prvi uporabi se prenese ~31 MB, slika se ne shrani in ne pošlje zunanjim storitvam.",
+      "Prepozna Finesove nalepke (Product type, Product code, Serial number, Production year, tudi slovenske oznake); serijska, ident in leto tudi po Finesovem formatu, skupina po obstoječi opremi.",
+      "V oknu so navodila za dobro fotografijo nalepke (od blizu, ostro, brez odseva, očiščena nalepka); prikažejo se tudi, ko je prebranih podatkov malo.",
+    ],
+  },
+  {
     verzija: "4.01",
     datum: "2026-10-10",
     spremembe: [
